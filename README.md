@@ -11,10 +11,9 @@ Provide a general introduction to your project. Describe the purpose, goals, and
 ## Team
 List the team members involved in the project:
 
-Team Leader: [Name]
+Team Leader: Boulahoula, Houda
 
-Members: [Name1], [Name2], [Name3]
-(Expand this list as necessary)
+Members: Houda Boulahoula, Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami Chaker, Yasmin Almadad, Jonas Haschke 
 
 
 

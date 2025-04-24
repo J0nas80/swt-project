@@ -80,8 +80,9 @@ $ ./mvnw spring-boot:run
 Provide an overview of the directory structure to help contributors navigate the project:
 ```bash,ignore
 ProjectName/
-├── project_one/        # Description of this subproject
-├── docs/               # Documentation
-├── tests/              # Test cases
+├── backend/            # maven project with spring service providing RestApi
+├── fake_service/       # simulates a third party service
+├── frontend            # Web Server providing UI view to the client
+├── infractructure      # database messagebrocker goes here.
 └── README.md           # This file
 ```

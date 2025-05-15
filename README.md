@@ -1,88 +1,12 @@
-# Template repository for the Software Engineering lecture
+# React + Vite
 
-> [!IMPORTANT]
-> Replace this README with a detailed description of your project, your team, and instructions on how to run it.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-> [!IMPORTANT]
-> If you choose to keep your repository private, make sure to invite all your team members and teaching staff. Ask for their usernames if needed.
+Currently, two official plugins are available:
 
-Provide a general introduction to your project. Describe the purpose, goals, and the technologies used. Explain the value your project offers.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Team
-List the team members involved in the project:
+## Expanding the ESLint configuration
 
-Team Leader: Boulahoula, Houda
-
-Members: Houda Boulahoula, Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami Chaker, Yasmin Almadad, Jonas Haschke 
-
-
-
-## Quickstart
-
-This section outlines the steps required to get your project up and running quickly:
-
-```bash,ignore
-# Example: Start a PostgreSQL database using Docker
-$ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
-
-# Example: Start the project (e.g., using Spring Boot)
-$ ./mvnw spring-boot:ru
-```
-
-## Prerequisites
-
-Detail all the necessary prerequisites for running your project, such as:
-
-Operating System: (e.g., Linux, macOS, Windows)
-
-Software: Docker, Java, Maven
-
-Ports: (e.g., port 8080, if applicable)
-
-## Installation and Setup
-
-Provide step-by-step instructions on how to clone the repository, install the project, and configure it:
-
-1. Clone the repository:
-```bash,ignore
-$ git clone https://github.com/YourRepository.git
-```
-
-2. Navigate to the project directory:
-```bash,ignore
-$ cd ProjectName
-```
-
-3. Adjust configuration files:
-
-Modify configuration files (e.g., `.env`, `application.properties`) as required.
-
-
-## Running the Project
-
-Explain in detail how to run the project, including:
-
-Starting the database
-
-Initializing data (if needed, via scripts)
-
-Starting the server
-
-```bash,ignore
-# Example: Initialize the database
-$ ./init-db.sh
-
-# Start the project
-$ ./mvnw spring-boot:run
-```
-
-## Project structure
-Provide an overview of the directory structure to help contributors navigate the project:
-```bash,ignore
-ProjectName/
-├── backend/            # maven project with spring service providing RestApi
-├── fake_service/       # simulates a third party service
-├── frontend            # Web Server providing UI view to the client
-├── infractructure      # database messagebrocker goes here.
-└── README.md           # This file
-```
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

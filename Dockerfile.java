@@ -11,4 +11,4 @@ RUN mvn clean package -DskipTests
 
 # Run the application
 # You should replace the executable name to the correct one
-CMD ["java", "-jar", "target/project_one-1.0-SNAPSHOT-shaded.jar"]
+CMD ["java", "-jar", "target/backend-1.0-SNAPSHOT.jar"]

@@ -1,0 +1,15 @@
+/* Tailwind directives */
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+/* Custom Global Styles */
+
+/* index.css */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
+}

@@ -82,8 +82,7 @@ Provide an overview of the directory structure to help contributors navigate the
 ProjectName/
 ├── backend/            # maven project with spring service providing RestApi
 ├── fake_service/       # simulates a third party service
-├── frontend            # Web Server providing UI view to the client (test)
-├── frontend-ui         # The complete frontend ui implemented in react-js (completed)
+├── frontend            # Web Server providing UI view to the client
 ├── infractructure      # database messagebrocker goes here.
 └── README.md           # This file
 ```

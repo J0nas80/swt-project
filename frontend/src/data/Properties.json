@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "image": "home",
+    "title": "Cozy Apartment",
+    "subtitle": "Central City",
+    "details": "2 beds · 1 bath · 900 sqft",
+    "moreInfoLink": "#"
+  },
+  {
+    "id": 2,
+    "image": "home",
+    "title": "Modern Loft",
+    "subtitle": "Suburb Area",
+    "details": "3 beds · 2 baths · 1200 sqft",
+    "moreInfoLink": "#"
+  }
+]

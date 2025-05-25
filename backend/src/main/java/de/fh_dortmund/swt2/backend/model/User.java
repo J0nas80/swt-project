@@ -20,9 +20,9 @@ public class User {
     private String email;
     private boolean visible;
     // todo: nummer? passwort? chatliste?
-    private LinkedList<Immobilie> realEstates;
-    private LinkedList<Immobilie> history;
-    private LinkedList<Immobilie> saved;
+    private LinkedList<Estate> realEstates;
+    private LinkedList<Estate> history;
+    private LinkedList<Estate> saved;
 
     // Konstruktoren
     public User() {
@@ -35,9 +35,9 @@ public class User {
         this.birthday = birthday;
         this.email = email;
         this.visible = true;
-        this.realEstates = new LinkedList<Immobilie>();
-        this.history = new LinkedList<Immobilie>();
-        this.saved = new LinkedList<Immobilie>();
+        this.realEstates = new LinkedList<Estate>();
+        this.history = new LinkedList<Estate>();
+        this.saved = new LinkedList<Estate>();
     }
 
     // Getter und Setter
@@ -89,27 +89,27 @@ public class User {
         this.sichtbar = sichtbar;
     }
 
-    public LinkedList<Immobilie> getImmobilien() {
+    public LinkedList<Estate> getImmobilien() {
         return immobilien;
     }
 
-    public void setImmobilien(LinkedList<Immobilie> immobilien) {
+    public void setImmobilien(LinkedList<Estate> immobilien) {
         this.immobilien = immobilien;
     }
 
-    public LinkedList<Immobilie> getVerlauf() {
+    public LinkedList<Estate> getVerlauf() {
         return verlauf;
     }
 
-    public void setVerlauf(LinkedList<Immobilie> verlauf) {
+    public void setVerlauf(LinkedList<Estate> verlauf) {
         this.verlauf = verlauf;
     }
 
-    public LinkedList<Immobilie> getGespeichert() {
+    public LinkedList<Estate> getGespeichert() {
         return gespeichert;
     }
 
-    public void setGespeichert(LinkedList<Immobilie> gespeichert) {
+    public void setGespeichert(LinkedList<Estate> gespeichert) {
         this.gespeichert = gespeichert;
     }
 

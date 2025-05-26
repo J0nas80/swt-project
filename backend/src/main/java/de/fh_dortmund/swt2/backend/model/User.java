@@ -18,11 +18,11 @@ public class User {
     private String name;
     private LocalDate birthday;
     private String email;
-    private boolean visible;
+    private boolean visibility;
     // todo: nummer? passwort? chatliste?
-    private LinkedList<Immobilie> realEstates;
-    private LinkedList<Immobilie> history;
-    private LinkedList<Immobilie> saved;
+    private LinkedList<Estate> realEstates;
+    private LinkedList<Estate> history;
+    private LinkedList<Estate> saved;
 
     // Konstruktoren
     public User() {
@@ -34,10 +34,10 @@ public class User {
         this.name = name;
         this.birthday = birthday;
         this.email = email;
-        this.visible = true;
-        this.realEstates = new LinkedList<Immobilie>();
-        this.history = new LinkedList<Immobilie>();
-        this.saved = new LinkedList<Immobilie>();
+        this.visibility = true;
+        this.realEstates = new LinkedList<Estate>();
+        this.history = new LinkedList<Estate>();
+        this.saved = new LinkedList<Estate>();
     }
 
     // Getter und Setter
@@ -49,28 +49,28 @@ public class User {
         this.id = id;
     }
 
-    public String getVorname() {
-        return vorname;
+    public String getfirstName() {
+        return firstName;
     }
 
-    public void setVorname(String vorname) {
-        this.vorname = vorname;
+    public void setfirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getNachname() {
-        return nachname;
+    public String getName() {
+        return name;
     }
 
-    public void setNachname(String nachname) {
-        this.nachname = nachname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public LocalDate getGeburtstag() {
-        return geburtstag;
+    public LocalDate getBirthday() {
+        return birthday;
     }
 
-    public void setGeburtstag(LocalDate geburtstag) {
-        this.geburtstag = geburtstag;
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 
     public String getEmail() {
@@ -81,36 +81,36 @@ public class User {
         this.email = email;
     }
 
-    public boolean isSichtbar() {
-        return sichtbar;
+    public boolean isVisible() {
+        return visibility;
     }
 
-    public void setSichtbar(boolean sichtbar) {
-        this.sichtbar = sichtbar;
+    public void setVisibility(boolean visibility) {
+        this.visibility = visibility;
     }
 
-    public LinkedList<Immobilie> getImmobilien() {
-        return immobilien;
+    public LinkedList<Estate> getEstate() {
+        return null;
     }
 
-    public void setImmobilien(LinkedList<Immobilie> immobilien) {
-        this.immobilien = immobilien;
+    public void setEstate(LinkedList<Estate> Estate) {
+        //Estate.add
     }
 
-    public LinkedList<Immobilie> getVerlauf() {
-        return verlauf;
+    public LinkedList<Estate> getVerlauf() {
+        return null;
     }
 
-    public void setVerlauf(LinkedList<Immobilie> verlauf) {
-        this.verlauf = verlauf;
+    public void setVerlauf(LinkedList<Estate> verlauf) {
+        //this.verlauf = verlauf;
     }
 
-    public LinkedList<Immobilie> getGespeichert() {
-        return gespeichert;
+    public LinkedList<Estate> getGespeichert() {
+        return null;
     }
 
-    public void setGespeichert(LinkedList<Immobilie> gespeichert) {
-        this.gespeichert = gespeichert;
+    public void setGespeichert(LinkedList<Estate> gespeichert) {
+        //this.gespeichert = gespeichert;
     }
 
 }

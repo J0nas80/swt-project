@@ -8,6 +8,9 @@ on:
 permissions:
   contents: read
   pull-requests: write
+    
+env:
+  REPO_LOWER_CASE: j0nas80/swt-project
 
 jobs:
   build:
@@ -48,5 +51,5 @@ jobs:
         with:
           context: ${{ matrix.project }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ghcr.io/${{ github.repository }}/${{ matrix.project }}:${{ github.sha }}
+          tags: ghcr.io/${{ env.REPO_LOWER_CASE }}/${{ matrix.project }}:${{ github.sha }}
           labels: ${{ steps.metadata.outputs.labels }}

@@ -18,7 +18,7 @@ public class User {
     private String name;
     private LocalDate birthday;
     private String email;
-    private boolean visible;
+    private boolean visibility;
     // todo: nummer? passwort? chatliste?
     private LinkedList<Estate> realEstates;
     private LinkedList<Estate> history;
@@ -34,7 +34,7 @@ public class User {
         this.name = name;
         this.birthday = birthday;
         this.email = email;
-        this.visible = true;
+        this.visibility = true;
         this.realEstates = new LinkedList<Estate>();
         this.history = new LinkedList<Estate>();
         this.saved = new LinkedList<Estate>();
@@ -49,28 +49,28 @@ public class User {
         this.id = id;
     }
 
-    public String getVorname() {
-        return vorname;
+    public String getfirstName() {
+        return firstName;
     }
 
-    public void setVorname(String vorname) {
-        this.vorname = vorname;
+    public void setfirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getNachname() {
-        return nachname;
+    public String getName() {
+        return name;
     }
 
-    public void setNachname(String nachname) {
-        this.nachname = nachname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public LocalDate getGeburtstag() {
-        return geburtstag;
+    public LocalDate getBirthday() {
+        return birthday;
     }
 
-    public void setGeburtstag(LocalDate geburtstag) {
-        this.geburtstag = geburtstag;
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 
     public String getEmail() {
@@ -81,36 +81,12 @@ public class User {
         this.email = email;
     }
 
-    public boolean isSichtbar() {
-        return sichtbar;
+    public boolean isVisible() {
+        return visibility;
     }
 
-    public void setSichtbar(boolean sichtbar) {
-        this.sichtbar = sichtbar;
-    }
-
-    public LinkedList<Estate> getImmobilien() {
-        return immobilien;
-    }
-
-    public void setImmobilien(LinkedList<Estate> immobilien) {
-        this.immobilien = immobilien;
-    }
-
-    public LinkedList<Estate> getVerlauf() {
-        return verlauf;
-    }
-
-    public void setVerlauf(LinkedList<Estate> verlauf) {
-        this.verlauf = verlauf;
-    }
-
-    public LinkedList<Estate> getGespeichert() {
-        return gespeichert;
-    }
-
-    public void setGespeichert(LinkedList<Estate> gespeichert) {
-        this.gespeichert = gespeichert;
+    public void setVisibility(boolean visibility) {
+        this.visibility = visibility;
     }
 
 }

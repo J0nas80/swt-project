@@ -18,37 +18,57 @@ public class User {
     private String name;
     private LocalDate birthday;
     private String email;
-    private boolean visibility;
-    // todo: nummer? passwort? chatliste?
+    private String phoneNumber;
+    private boolean visible;
+    // TODO: passwort? chatliste?
     private LinkedList<Estate> realEstates;
     private LinkedList<Estate> history;
     private LinkedList<Estate> saved;
 
-    // Konstruktoren
-    public User() {
-    }
 
-    public User(String firstName, String name, LocalDate birthday, String email) {
-        // todo: Id setzen
+    // Konstruktoren
+    public User() {}
+
+    public User(String firstName, String name, LocalDate birthday, String email, String phoneNumber) {
         this.firstName = firstName;
         this.name = name;
         this.birthday = birthday;
         this.email = email;
-        this.visibility = true;
+        this.phoneNumber = phoneNumber;
+        this.visible = true;
         this.realEstates = new LinkedList<Estate>();
         this.history = new LinkedList<Estate>();
         this.saved = new LinkedList<Estate>();
     }
 
+
+    // Methoden
+    public void addRealEstate(Estate estate) {
+        this.realEstates.add(estate);
+    }
+
+    public void removeRealEstate(Estate estate) {
+        this.realEstates.remove(estate);
+    }
+
+    public void addToHistory(Estate estate) {
+        this.history.add(estate);
+    }
+
+    public void removeFromHistory(Estate estate) {
+        this.history.remove(estate);
+    }
+
+    public void saveEstate(Estate estate) {
+        this.saved.add(estate);
+    }
+
+    public void removeSavedEstate(Estate estate) {
+        this.saved.remove(estate);
+    }
+
+
     // Getter und Setter
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getfirstName() {
         return firstName;
     }
@@ -81,12 +101,43 @@ public class User {
         this.email = email;
     }
 
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber){
+        this.phoneNumber = phoneNumber;
+    }
+
     public boolean isVisible() {
-        return visibility;
+        return visible;
     }
 
-    public void setVisibility(boolean visibility) {
-        this.visibility = visibility;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
+    public LinkedList<Estate> getRealEstates() {
+        return realEstates;
+    }
+
+    public void setRealEstates(LinkedList<Estate> realEstates) {
+        this.realEstates = realEstates;
+    }
+
+    public LinkedList<Estate> getHistory() {
+        return history;
+    }
+
+    public void setHistory(LinkedList<Estate> history) {
+        this.history = history;
+    }
+
+    public LinkedList<Estate> getSaved() {
+        return saved;
+    }
+
+    public void setSaved(LinkedList<Estate> saved) {
+        this.saved = saved;
+    }
 }

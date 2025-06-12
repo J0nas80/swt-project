@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import de.fh_dortmund.swt2.backend.model.Estate;
-import de.fh_dortmund.swt2.backend.model.User;
 import de.fh_dortmund.swt2.backend.service.EstateService;
 
 @RestController

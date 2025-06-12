@@ -2,14 +2,18 @@ package de.fh_dortmund.swt2.backend.model;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
-public class User {
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,24 +25,24 @@ public class User {
     private String phoneNumber;
     private boolean visible;
     // TODO: passwort? chatliste?
-    private LinkedList<Estate> realEstates;
-    private LinkedList<Estate> history;
-    private LinkedList<Estate> saved;
+    @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
+    private List<Estate> realEstates = new LinkedList<Estate>();
+    @ManyToMany
+    private List<Estate> history = new LinkedList<Estate>();
+    @ManyToMany
+    private List<Estate> saved = new LinkedList<Estate>();
 
 
     // Konstruktoren
-    public User() {}
+    public AppUser() {}
 
-    public User(String firstName, String name, LocalDate birthday, String email, String phoneNumber) {
+    public AppUser(String firstName, String name, LocalDate birthday, String email, String phoneNumber) {
         this.firstName = firstName;
         this.name = name;
         this.birthday = birthday;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.visible = true;
-        this.realEstates = new LinkedList<Estate>();
-        this.history = new LinkedList<Estate>();
-        this.saved = new LinkedList<Estate>();
     }
 
 
@@ -117,27 +121,27 @@ public class User {
         this.visible = visible;
     }
 
-    public LinkedList<Estate> getRealEstates() {
+    public List<Estate> getRealEstates() {
         return realEstates;
     }
 
-    public void setRealEstates(LinkedList<Estate> realEstates) {
+    public void setRealEstates(List<Estate> realEstates) {
         this.realEstates = realEstates;
     }
 
-    public LinkedList<Estate> getHistory() {
+    public List<Estate> getHistory() {
         return history;
     }
 
-    public void setHistory(LinkedList<Estate> history) {
+    public void setHistory(List<Estate> history) {
         this.history = history;
     }
 
-    public LinkedList<Estate> getSaved() {
+    public List<Estate> getSaved() {
         return saved;
     }
 
-    public void setSaved(LinkedList<Estate> saved) {
+    public void setSaved(List<Estate> saved) {
         this.saved = saved;
     }
 }

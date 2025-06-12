@@ -1,9 +1,12 @@
 package de.fh_dortmund.swt2.backend.model;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -20,8 +23,10 @@ public class Estate {
     private double rentCold;
     private double rentWarm;
     private String adress; //muss man vllt noch anpassen, wegen DB Datentyp?
-    private User landlord;
-    private LinkedList<User> tenants;
+    @ManyToOne
+    private AppUser landlord;
+    @ManyToMany
+    private List<AppUser> tenants = new LinkedList<AppUser>();
     private boolean validated;
     private boolean visible;
     private boolean available;
@@ -30,7 +35,7 @@ public class Estate {
     //Konstruktoren
     public Estate(){}
 
-    public Estate(double area, double roomCount, String description, double rentCold, double rentWarm, String adress, User landLord){
+    public Estate(double area, double roomCount, String description, double rentCold, double rentWarm, String adress, AppUser landLord){
         this.area = area;
         this.roomCount = roomCount;
         this.description = description;
@@ -38,7 +43,6 @@ public class Estate {
         this.rentWarm = rentWarm;
         this.adress = adress;
         this.landlord = landLord;
-        this.tenants = new LinkedList<User>();
         validated = false;
         visible = false;
         available = false;
@@ -46,11 +50,11 @@ public class Estate {
 
 
     // Methoden
-    public void addTenant(User tenant){
+    public void addTenant(AppUser tenant){
         this.tenants.add(tenant);
     }
 
-    public void removeTenant(User tenant){
+    public void removeTenant(AppUser tenant){
         this.tenants.remove(tenant);
     }
 
@@ -64,11 +68,11 @@ public class Estate {
         this.id = id;
     }
 
-    public void addTenants(User tenant){
+    public void addTenants(AppUser tenant){
         tenants.add(tenant);
     }
 
-    public void removeTenants(User tenant){
+    public void removeTenants(AppUser tenant){
         tenants.remove(tenant);
     }
 
@@ -120,19 +124,19 @@ public class Estate {
         this.adress = adress;
     }
 
-    public User getLandlord() {
+    public AppUser getLandlord() {
         return landlord;
     }
 
-    public void setLandlord(User landlord) {
+    public void setLandlord(AppUser landlord) {
         this.landlord = landlord;
     }
 
-    public LinkedList<User> getTenants() {
+    public List<AppUser> getTenants() {
         return tenants;
     }
 
-    public void setTenants(LinkedList<User> tenants) {
+    public void setTenants(List<AppUser> tenants) {
         this.tenants = tenants;
     }
 

@@ -3,31 +3,31 @@ package de.fh_dortmund.swt2.backend.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import de.fh_dortmund.swt2.backend.model.User;
-import de.fh_dortmund.swt2.backend.repository.UserRepository;
+import de.fh_dortmund.swt2.backend.model.AppUser;
+import de.fh_dortmund.swt2.backend.repository.AppUserRepository;
 
-public class UserService {
+public class AppUserService {
 
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
 
-    public UserService(UserRepository userRepository){
-        this.userRepository = userRepository;
+    public AppUserService(AppUserRepository appUserRepository){
+        this.appUserRepository = appUserRepository;
     }
 
     // Registrierung
-    public void register(User user) {
+    public void register(AppUser appUser) {
         // Prüfen, ob E-Mail oder Handynummer schon vergeben ist
-        if(userRepository.existsByEmail(user.getEmail())){
+        if(appUserRepository.existsByEmail(appUser.getEmail())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-Mail wird bereits verwendet.");
         }
-        if(userRepository.existsByPhoneNumber(user.getPhoneNumber())){
+        if(appUserRepository.existsByPhoneNumber(appUser.getPhoneNumber())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Handynummer wird bereits verwendet.");
         }
-        userRepository.save(user);
+        appUserRepository.save(appUser);
     }
 
     // Nutzer aus Token zurückgeben 
-    public User getUserFromToken(String token) {
+    public AppUser getUserFromToken(String token) {
         // TODO
         // Token entschlüsseln, Benutzer-ID extrahieren, User zurückgeben
         throw new UnsupportedOperationException("Unimplemented method 'getUserFromToken'");

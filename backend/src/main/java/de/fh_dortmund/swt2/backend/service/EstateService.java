@@ -2,9 +2,12 @@ package de.fh_dortmund.swt2.backend.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import de.fh_dortmund.swt2.backend.model.Estate;
 import de.fh_dortmund.swt2.backend.repository.EstateRepository;
 
+@Service
 public class EstateService {
     
     private final EstateRepository estateRepository;

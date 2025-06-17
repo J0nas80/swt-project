@@ -3,48 +3,51 @@ package de.fh_dortmund.swt2.backend.model;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-
+import jakarta.persistence.*;                // Für Entity, Id, Column, usw.
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.Pattern;  // Für Validierung der Telefonnummer
+import jakarta.validation.constraints.Email;
 
 @Entity
 public class AppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AppUser_seq")
+    @SequenceGenerator(name = "AppUser_seq", sequenceName = "AppUser_seq", allocationSize = 1)
     private Long id;
-
     private String firstName;
     private String name;
-    private LocalDate birthday;
+    private LocalDate dob;
+    @Column(unique = true)
+    @Email(message = "Ungültige E-Mail-Adresse")
     private String email;
-    private String phoneNumber;
+    private String gender;
+    @Pattern(regexp = "^\\+?[0-9 ]{7,20}$", message = "Ungültige Telefonnummer")
+    private String phonenumber;
+    private String password;
     private boolean visible;
-    // TODO: passwort? chatliste?
+    
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
     private List<Estate> realEstates = new LinkedList<Estate>();
     @ManyToMany
     private List<Estate> history = new LinkedList<Estate>();
     @ManyToMany
     private List<Estate> saved = new LinkedList<Estate>();
+    // TODO: chatliste?
 
 
     // Konstruktoren
     public AppUser() {}
 
-    public AppUser(String firstName, String name, LocalDate birthday, String email, String phoneNumber) {
+    public AppUser(String firstName, String name, LocalDate dob, String email, String gender, String phonenumber) {
         this.firstName = firstName;
         this.name = name;
-        this.birthday = birthday;
+        this.dob = dob;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.phonenumber = phonenumber;
         this.visible = true;
     }
-
+    
 
     // Methoden
     public void addRealEstate(Estate estate) {
@@ -73,11 +76,19 @@ public class AppUser {
 
 
     // Getter und Setter
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getfirstName() {
         return firstName;
     }
 
-    public void setfirstName(String firstName) {
+    public void setfirstName(String firstName) {        
         this.firstName = firstName;
     }
 
@@ -89,12 +100,13 @@ public class AppUser {
         this.name = name;
     }
 
-    public LocalDate getBirthday() {
-        return birthday;
+
+    public LocalDate getDob() {
+        return dob;
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     public String getEmail() {
@@ -105,12 +117,28 @@ public class AppUser {
         this.email = email;
     }
 
-    public String getPhoneNumber(){
-        return phoneNumber;
+    public String getGender() {
+        return gender;
     }
 
-    public void setPhoneNumber(String phoneNumber){
-        this.phoneNumber = phoneNumber;
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 
     public boolean isVisible() {

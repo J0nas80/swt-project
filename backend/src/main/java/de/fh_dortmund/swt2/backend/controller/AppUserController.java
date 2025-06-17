@@ -17,12 +17,14 @@ public class AppUserController {
     }
 
 
+    /* Todo: Die ist vermutlich nicht mehr nötig wegen RegistrationController (?)
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody AppUser appUser){
         appUserService.register(appUser);
         return ResponseEntity.ok().build();
-    }
+    }*/
 
+    // Todo: Das mit den Tokens müssen wir nochmal besprechen
     @GetMapping
     public ResponseEntity<?> getUserFromToken(@RequestHeader("Authorization") String token){
         AppUser appUser = appUserService.getUserFromToken(token);

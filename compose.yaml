@@ -2,6 +2,7 @@ version: '0.2'
 services:
   backend:
     image: ghcr.io/j0nas80/swt-project/backend
+    container_name: backend
     environment:
       HTTP_PORT: 8080
     env_file:
@@ -10,28 +11,34 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - db
+      - database
+      - mqtt
     networks:
       - swt-network
   
   fake_service:
     image: ghcr.io/j0nas80/swt-project/fake_service
+    container_name: fake_service
     environment:
       HTTP_PORT: 8080
     env_file:
       - path: ./infrastructure/postgre/postgres.env
         required: true
+    depends_on:
+      - database
+      - mqtt
     networks:
       - swt-network
   
   frontend:
     image: ghcr.io/j0nas80/swt-project/frontend
+    container_name: frontend
     environment:
       NODE_ENV: production
     ports:
       - 3000:3000
 
-  db:
+  database:
     image: postgres:17
     container_name: database
     restart: always
@@ -39,7 +46,7 @@ services:
       - path: ./infrastructure/postgre/postgres.env
         required: true
     volumes:
-      - ./infratructure/postgre/data:/var/lib/postgresql/data
+      - ./infrastructure/postgre/data:/var/lib/postgresql/data
 
 #    ports:
 #      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
@@ -48,6 +55,7 @@ services:
 
   mqtt:
     image: eclipse-mosquitto:2
+    container_name: mqtt
     ports:
       - 1883:1883
       - 8883:8883

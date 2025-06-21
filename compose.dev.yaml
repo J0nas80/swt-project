@@ -1,7 +1,7 @@
 version: '0.2'
 services:
   backend:
-    image: ghcr.io/j0nas80/swt-project/backend
+    build: ./backend
     environment:
       HTTP_PORT: 8080
     env_file:
@@ -15,7 +15,7 @@ services:
       - swt-network
   
   fake_service:
-    image: ghcr.io/j0nas80/swt-project/fake_service
+    build: ./fake_service
     environment:
       HTTP_PORT: 8080
     env_file:
@@ -25,7 +25,7 @@ services:
       - swt-network
   
   frontend:
-    image: ghcr.io/j0nas80/swt-project/frontend
+    build: ./frontend
     environment:
       NODE_ENV: production
     ports:

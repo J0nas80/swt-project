@@ -4,6 +4,5 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 ARG JAR_FILE=target/*.jar
-WORKDIR /fake_service
-COPY ${JAR_FILE} app.jar
+RUN cp ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

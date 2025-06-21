@@ -1,6 +1,7 @@
 version: '0.2'
 services:
   backend:
+    container_name: backend
     build: ./backend
     environment:
       HTTP_PORT: 8080
@@ -15,6 +16,7 @@ services:
       - swt-network
   
   fake_service:
+    continer_name: fake_service
     build: ./fake_service
     environment:
       HTTP_PORT: 8080
@@ -25,6 +27,7 @@ services:
       - swt-network
   
   frontend:
+    container_name: frontend
     build: ./frontend
     environment:
       NODE_ENV: production

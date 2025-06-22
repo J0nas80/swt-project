@@ -25,7 +25,7 @@ services:
       - path: ./infrastructure/postgre/postgres.env
         required: true
     depends_on: 
-      - database#
+      - database
       - mqtt
     networks:
       - swt-network

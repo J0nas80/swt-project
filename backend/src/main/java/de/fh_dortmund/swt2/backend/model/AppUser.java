@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import jakarta.persistence.*;                // Für Entity, Id, Column, usw.
 import jakarta.validation.constraints.Pattern;  // Für Validierung der Telefonnummer
 import jakarta.validation.constraints.Email; 
-import org.hibernate.annotations.*; 
 import java.io.*;
 
 @Entity

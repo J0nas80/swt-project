@@ -1,7 +1,6 @@
 package de.fh_dortmund.swt2.backend.model;
 
 
-import java.time.LocalDate;
 import java.util.LinkedList;
 
 import jakarta.persistence.Entity;

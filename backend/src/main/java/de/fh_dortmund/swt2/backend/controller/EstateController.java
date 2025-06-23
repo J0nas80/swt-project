@@ -25,12 +25,6 @@ public class EstateController {
         return ResponseEntity.ok().build();
     }
 
-    /* TODO: Nochmal nachfragen, was soll die Anfrage?
-    @GetMapping
-    public ResponseEntity<?> getEstate( ... ){
-        return null;
-    } */
-
     // Gibt aktuell alle Estates zurück
     // TODO: Stattdessen zb. nur eine begrenzte Anzahl und nur die wichtigen Attribute?
     @GetMapping("/all")

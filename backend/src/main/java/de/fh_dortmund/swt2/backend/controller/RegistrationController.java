@@ -21,6 +21,7 @@ public class RegistrationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Todo: Sollte die Logik nicht besser in eine Service Klasse ausgelagert werden?
     @PostMapping("/register")
     public AppUser createUser(@Valid @RequestBody AppUser appUser){
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));

@@ -1,10 +1,8 @@
 package de.fh_dortmund.swt2.backend.controller;
 
-import de.fh_dortmund.swt2.backend.repository.AppUserRepository;
+import de.fh_dortmund.swt2.backend.service.RegistrationService;
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,17 +13,16 @@ import de.fh_dortmund.swt2.backend.model.AppUser;
 @RestController
 @RequestMapping("/api/auth")
 public class RegistrationController {
-    @Autowired
-    private AppUserRepository appUserRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final RegistrationService registrationService;
 
-    // Todo: Sollte die Logik nicht besser in eine Service Klasse ausgelagert werden?
+    public RegistrationController(RegistrationService registrationService){
+        this.registrationService = registrationService;
+    }
+    
     @PostMapping("/register")
     public AppUser createUser(@Valid @RequestBody AppUser appUser){
-        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        return appUserRepository.save(appUser);
+        return registrationService.saveUser(appUser);
     }
     
 }

@@ -1,7 +1,7 @@
 package de.fh_dortmund.swt2.backend.dto;
 
 
-public class LoginRequest {
+public class LoginDto {
     private String email;
     private String password;
 

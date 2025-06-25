@@ -3,32 +3,46 @@ package de.fh_dortmund.swt2.backend.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
 public class Estate {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Estate_seq")
+    @SequenceGenerator(name = "Estate_seq", sequenceName = "Estate_seq", allocationSize = 1)
     private Long id;
 
     //Attribute
-    private double area;
-    private double roomCount;
+    @NotNull(message = "Fläche muss angegeben werden")
+    private Double area;
+    @NotNull(message = "Zimmeranzahl muss angegeben werden")
+    private Double roomCount;
+    @NotBlank(message = "Beschreibung darf nicht leer sein")
     private String description;
-    private double rentCold;
-    private double rentWarm;
-    private String adress; //muss man vllt noch anpassen, wegen DB Datentyp?
+    @NotNull(message = "Kaltmiete muss angegeben werden")
+    private Double rentCold;
+    @NotNull(message = "Warmmiete muss angegeben werden")
+    private Double rentWarm;
+    @NotBlank(message = "Adresse darf nicht leer sein")
+    private String adress;
     @ManyToOne
     private AppUser landlord;
     @ManyToMany
     private List<AppUser> tenants = new LinkedList<AppUser>();
+    @Column(nullable = false)
     private boolean validated;
+    @Column(nullable = false)
     private boolean visible;
+    @Column(nullable = false)
     private boolean available;
 
 
@@ -145,8 +159,10 @@ public class Estate {
     }
 
     public void setValidated(boolean validated) {
+        // Wird eine Immobilie validiert, ist sie direkt auch sichtbar und verfügbar
         this.validated = validated;
-        // TODO: evtl. bei Validierung auch direkt sichtbar und verfügbar machen?
+        this.visible = validated;
+        this.available = validated;
     }
 
     public boolean isVisible() {

@@ -14,6 +14,8 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class AppUser {
+
+    //Attribute
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AppUser_seq")
     @SequenceGenerator(name = "AppUser_seq", sequenceName = "AppUser_seq", allocationSize = 1)
@@ -21,30 +23,39 @@ public class AppUser {
 
     @NotBlank(message = "Vorname darf nicht leer sein")
     private String firstName;
+
     @NotBlank(message = "Nachname darf nicht leer sein")
     private String name;
+
     @NotNull(message = "Geburtsdatum darf nicht null sein")
     private LocalDate dob;
+
     @NotBlank(message = "E-Mail darf nicht leer sein")
     @Email(message = "Ungültige E-Mail-Adresse")
     @Column(unique = true)
     private String email;
+
     @NotBlank(message = "Geschlecht darf nicht leer sein")
     private String gender;
+
     @NotBlank(message = "Telefonnummer darf nicht leer sein")
     @Pattern(regexp = "^\\+?[0-9 ]{7,20}$", message = "Ungültige Telefonnummer")
     @Column(unique = true)
     private String phonenumber;
+
     @NotBlank(message = "Passwort darf nicht leer sein")
     @JsonIgnore
     private String password;
+
     @Column(nullable = false)
     private boolean visible;
     
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
     private List<Estate> realEstates = new LinkedList<Estate>();
+
     @ManyToMany
     private List<Estate> history = new LinkedList<Estate>();
+    
     @ManyToMany
     private List<Estate> saved = new LinkedList<Estate>();
     // TODO: chatliste?

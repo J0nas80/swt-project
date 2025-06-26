@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -16,64 +17,75 @@ import jakarta.persistence.GenerationType;
 
 @Entity
 public class Estate {
+
+    // Attribute
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Estate_seq")
     @SequenceGenerator(name = "Estate_seq", sequenceName = "Estate_seq", allocationSize = 1)
     private Long id;
 
-    //Attribute
     @NotNull(message = "Fläche muss angegeben werden")
     private Double area;
+
     @NotNull(message = "Zimmeranzahl muss angegeben werden")
     private Double roomCount;
+
     @NotBlank(message = "Beschreibung darf nicht leer sein")
     private String description;
+
     @NotNull(message = "Kaltmiete muss angegeben werden")
     private Double rentCold;
+
     @NotNull(message = "Warmmiete muss angegeben werden")
     private Double rentWarm;
-    @NotBlank(message = "Adresse darf nicht leer sein")
-    private String adress;
+
+    @NotNull(message = "Adresse darf nicht leer sein")
+    @Embedded
+    private Address address;
+
     @ManyToOne
     private AppUser landlord;
+
     @ManyToMany
     private List<AppUser> tenants = new LinkedList<AppUser>();
+
     @Column(nullable = false)
     private boolean validated;
+
     @Column(nullable = false)
     private boolean visible;
+
     @Column(nullable = false)
     private boolean available;
 
+    // Konstruktoren
+    public Estate() {
+    }
 
-    //Konstruktoren
-    public Estate(){}
-
-    public Estate(double area, double roomCount, String description, double rentCold, double rentWarm, String adress, AppUser landLord){
+    public Estate(double area, double roomCount, String description, double rentCold, double rentWarm, Address address,
+            AppUser landLord) {
         this.area = area;
         this.roomCount = roomCount;
         this.description = description;
         this.rentCold = rentCold;
         this.rentWarm = rentWarm;
-        this.adress = adress;
+        this.address = address;
         this.landlord = landLord;
         validated = false;
         visible = false;
         available = false;
     }
 
-
     // Methoden
-    public void addTenant(AppUser tenant){
+    public void addTenant(AppUser tenant) {
         this.tenants.add(tenant);
     }
 
-    public void removeTenant(AppUser tenant){
+    public void removeTenant(AppUser tenant) {
         this.tenants.remove(tenant);
     }
 
-
-    //Getter & Setter
+    // Getter & Setter
     public Long getId() {
         return id;
     }
@@ -82,11 +94,11 @@ public class Estate {
         this.id = id;
     }
 
-    public void addTenants(AppUser tenant){
+    public void addTenants(AppUser tenant) {
         tenants.add(tenant);
     }
 
-    public void removeTenants(AppUser tenant){
+    public void removeTenants(AppUser tenant) {
         tenants.remove(tenant);
     }
 
@@ -130,12 +142,12 @@ public class Estate {
         this.rentWarm = rentWarm;
     }
 
-    public String getAdress() {
-        return adress;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAdress(Address address) {
+        this.address = address;
     }
 
     public AppUser getLandlord() {

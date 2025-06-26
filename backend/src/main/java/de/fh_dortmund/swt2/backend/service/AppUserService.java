@@ -78,8 +78,12 @@ public class AppUserService implements UserDetailsService {
 
     // Nutzer aus Token zurückgeben 
     public AppUser getUserFromToken(String token) {
-        // TODO
-        // Token entschlüsseln, Benutzer-ID extrahieren, User zurückgeben
-        throw new UnsupportedOperationException("Unimplemented method 'getUserFromToken'");
+        // Email aus Token extrahieren und passenden AppUser zurückgeben
+        String email = jwtUtil.extractEmail(token);
+        if(email == null){
+            throw new UsernameNotFoundException("Token ethält keine E-Mail");
+        }
+        return appUserRepository.findByEmail(email).orElseThrow(
+            () -> new UsernameNotFoundException("Nutzer nicht gefunden: " + email));
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import de.fh_dortmund.swt2.backend.dto.EstateDto;
 import de.fh_dortmund.swt2.backend.model.Estate;
 import de.fh_dortmund.swt2.backend.service.EstateService;
 
@@ -20,9 +21,13 @@ public class EstateController {
 
 
     @PostMapping()
-    public ResponseEntity<?> saveEstate(@RequestBody Estate estate){
-        estateService.saveEstate(estate);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> saveEstate(@RequestHeader("Authorization") String token, @RequestBody EstateDto estateDto){
+        if(token.startsWith("Bearer ")){
+            // Token kommt als "Bearer <token>", also muss "Bearer " abgeschnitten werden
+            token = token.replace("Bearer ", "");
+        }
+        // Weiterreichen an Service
+        return ResponseEntity.ok(estateService.saveEstate(estateDto, token));
     }
 
     // Gibt aktuell alle Estates zurück

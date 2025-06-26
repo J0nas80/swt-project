@@ -50,7 +50,7 @@ public class Estate {
     @ManyToOne
     private AppUser landlord;
 
-    @NotNull (message = "Pfad für Bild muss angegeben werden")
+    @NotNull(message = "Pfad für Bild muss angegeben werden")
     private String img;
 
     @ManyToMany
@@ -69,7 +69,8 @@ public class Estate {
     public Estate() {
     }
 
-    public Estate(String type, double area, double roomCount, String description, double rentCold, double rentWarm, Address address,
+    public Estate(String type, double area, double roomCount, String description, double rentCold, double rentWarm,
+            Address address,
             AppUser landLord, String img, LocalDate availableFrom) {
         this.type = type;
         this.area = area;
@@ -81,11 +82,24 @@ public class Estate {
         this.landlord = landLord;
         this.validated = false;
         this.visible = false;
+        //Img über Base64
         this.img = img;
         this.availableFrom = availableFrom;
     }
 
     // Methoden
+    // Muster: Fabrikmethode, implementiert als statische Methode zur Erzeugung von
+    // Objekten
+    public static Estate createEstate(String type, double area, double roomCount, String description, double rentCold,
+            double rentWarm, Address address,
+            AppUser landLord, String img, LocalDate availableFrom) {
+        Estate estate = new Estate(type, area, roomCount, description, rentCold, rentWarm, address, landLord, img,
+                availableFrom);
+        estate.setValidated(false);
+        estate.setVisible(false);
+        return estate;
+    }
+
     public void addTenant(AppUser tenant) {
         this.tenants.add(tenant);
     }

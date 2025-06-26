@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PageLayout from "../components/PageLayout";
 import PropertyCard from "../components/PropertyCard";
 import Sidebar from "../components/Sidebar";
 import TopNav from "../components/TopNav";
 import BottomNav from "../components/BottomNav";
-import properties from "../data/properties.json";
 import ChatSidebar from "../components/ChatSidebar";
 
 export default function Home() {
   const navigate = useNavigate();
   const [chatOpen, setChatOpen] = useState(false);
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Replace URL with your actual backend route
+    axios.get("http://localhost:8080/api/inserate")
+      .then((response) => {
+        setProperties(response.data);
+      })
+      .catch((error) => {
+        console.error("Fehler beim Laden der Inserate:", error);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div>
@@ -27,9 +42,21 @@ export default function Home() {
       <ChatSidebar isOpen={chatOpen} onClose={() => setChatOpen(false)} />
 
       <PageLayout>
-        {properties.map((property) => (
-          <PropertyCard key={property.id} {...property} />
-        ))}
+        {loading ? (
+          <p>Inserate werden geladen...</p>
+        ) : properties.length > 0 ? (
+          properties.map((property) => (
+            <Link
+              to={`/listing/${property.id}`}
+              key={property.id}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <PropertyCard {...property} />
+            </Link>
+          ))
+        ) : (
+          <p>Keine Inserate gefunden.</p>
+        )}
 
         <div style={actionContainerStyle}>
           <button style={buttonStyle}>❌</button>

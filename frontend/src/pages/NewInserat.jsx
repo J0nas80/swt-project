@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import axios from 'axios';
 import TopNav from '../components/TopNav';
 import BottomNav from '../components/BottomNav';
 
 export default function InseratForm() {
   const [formData, setFormData] = useState({
     title: '',
+    type: '',
     description: '',
     price: '',
     address: '',
@@ -23,9 +25,43 @@ export default function InseratForm() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Inserat submitted:', formData);
+
+    const data = new FormData();
+    for (const key in formData) {
+      data.append(key, formData[key]);
+    }
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/inserat', // Replace with actual backend endpoint
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('Inserat erfolgreich eingereicht:', response.data);
+      alert('Inserat wurde erfolgreich eingereicht!');
+      // Optionally reset the form:
+      setFormData({
+        title: '',
+        type: '',
+        description: '',
+        price: '',
+        address: '',
+        city: '',
+        area: '',
+        access_from: '',
+        image: null
+      });
+    } catch (error) {
+      console.error('Fehler beim Einreichen des Inserats:', error);
+      alert('Fehler beim Einreichen.');
+    }
   };
 
   return (
@@ -42,6 +78,19 @@ export default function InseratForm() {
           style={styles.input}
           required
         />
+        <select
+        name="type"
+        value={formData.type}
+        onChange={handleChange}
+        style={styles.input}
+        required
+        >
+        <option value="">Wohnform wählen</option>
+        <option value="CoHousing">CoHousing</option>
+        <option value="Mehrgenerationwohnung">Mehrgenerationwohnung</option>
+        <option value="Mikroappartement">Mikroappartement</option>
+        <option value="Baugruppe">Baugruppe</option>
+        </select>
         <textarea
           name="description"
           placeholder="Beschreibung"

@@ -10,6 +10,7 @@ import UserData from './pages/UserData';
 import ChatDetail from "./pages/ChatDetail";
 import NewInserat from './pages/NewInserat';
 import InseratCreate from './pages/InseratCreate';
+import ListingDetail from './pages/ListingDetail';
 
 
 const AppRoutes = () => (
@@ -25,6 +26,7 @@ const AppRoutes = () => (
     <Route path="/help-feedback" element={<Feedback />} />
     <Route path="/user-data" element={<UserData />} />
     <Route path="/chat/:id" element={<ChatDetail />} />
+    <Route path="/listing/:id" element={<ListingDetail />} />
   </Routes>
 );
 

@@ -37,7 +37,7 @@ public class LoginController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falsches Passwort");
             }
 
-            String token = jwtUtil.generateToken(user.getEmail());
+            String token = jwtUtil.generateToken(user);
 
             // gibt den Token als JSON zurück
             return ResponseEntity.ok(Map.of("token", token));

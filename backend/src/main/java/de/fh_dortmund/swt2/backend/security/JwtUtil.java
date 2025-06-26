@@ -5,6 +5,8 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import de.fh_dortmund.swt2.backend.model.AppUser;
+
 import javax.crypto.SecretKey;
 import java.util.Date;
 
@@ -18,9 +20,9 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(String email) {
+    public String generateToken(AppUser user) {
         return Jwts.builder()
-                .subject(email)
+                .subject(user.getEmail())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
                 .signWith(getSigningKey(), Jwts.SIG.HS256)

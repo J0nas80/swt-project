@@ -1,5 +1,6 @@
 package de.fh_dortmund.swt2.backend.model;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class Estate {
     @SequenceGenerator(name = "Estate_seq", sequenceName = "Estate_seq", allocationSize = 1)
     private Long id;
 
+    @NotNull(message = "Wohnform muss angegeben werden")
+    private String type;
+
     @NotNull(message = "Fläche muss angegeben werden")
     private Double area;
 
@@ -46,6 +50,9 @@ public class Estate {
     @ManyToOne
     private AppUser landlord;
 
+    @NotNull (message = "Pfad für Bild muss angegeben werden")
+    private String img;
+
     @ManyToMany
     private List<AppUser> tenants = new LinkedList<AppUser>();
 
@@ -56,14 +63,15 @@ public class Estate {
     private boolean visible;
 
     @Column(nullable = false)
-    private boolean available;
+    private LocalDate availableFrom;
 
     // Konstruktoren
     public Estate() {
     }
 
-    public Estate(double area, double roomCount, String description, double rentCold, double rentWarm, Address address,
-            AppUser landLord) {
+    public Estate(String type, double area, double roomCount, String description, double rentCold, double rentWarm, Address address,
+            AppUser landLord, String img, LocalDate availableFrom) {
+        this.type = type;
         this.area = area;
         this.roomCount = roomCount;
         this.description = description;
@@ -71,9 +79,10 @@ public class Estate {
         this.rentWarm = rentWarm;
         this.address = address;
         this.landlord = landLord;
-        validated = false;
-        visible = false;
-        available = false;
+        this.validated = false;
+        this.visible = false;
+        this.img = img;
+        this.availableFrom = availableFrom;
     }
 
     // Methoden
@@ -174,7 +183,6 @@ public class Estate {
         // Wird eine Immobilie validiert, ist sie direkt auch sichtbar und verfügbar
         this.validated = validated;
         this.visible = validated;
-        this.available = validated;
     }
 
     public boolean isVisible() {
@@ -185,11 +193,11 @@ public class Estate {
         this.visible = visible;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public LocalDate isAvailable() {
+        return availableFrom;
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setAvailable(LocalDate availableFrom) {
+        this.availableFrom = availableFrom;
     }
 }

@@ -1,4 +1,4 @@
-package de.fh_dortmund.swt2.backend.model;
+package de.fh_dortmund.swt2.fake_service.model;
 
 import java.time.LocalDate;
 import java.util.LinkedList;

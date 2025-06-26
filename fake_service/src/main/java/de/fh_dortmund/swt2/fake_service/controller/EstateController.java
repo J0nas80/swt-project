@@ -6,17 +6,28 @@ import org.springframework.web.bind.annotation.*;
 import de.fh_dortmund.swt2.fake_service.exception.AppUserNotFoundException;
 import de.fh_dortmund.swt2.fake_service.model.Estate;
 import de.fh_dortmund.swt2.fake_service.service.EstateService;
+import de.fh_dortmund.swt2.fake_service.utils.messaging.MqttPublisherImpl;
 
 @RestController
 @RequestMapping("/api/Estate")
 public class EstateController {
 	
 	@Autowired
+	private MqttPublisherImpl mqttPublisher;
+
+	@Autowired
 	private EstateService estateService;
 
 	@GetMapping("/create/random")
 	Estate createRandom() throws AppUserNotFoundException, Exception
 	{
-			return estateService.createRandomEstate();
+		return estateService.createRandomEstate();
+	}
+
+	@GetMapping("/test/mqtt")
+	void createMqttTest()
+	{
+		mqttPublisher.publishMessage("Test", "test request ausgelöst");
+		
 	}
 }

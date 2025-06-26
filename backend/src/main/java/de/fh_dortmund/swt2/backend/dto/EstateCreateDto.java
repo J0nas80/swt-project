@@ -1,17 +1,25 @@
 package de.fh_dortmund.swt2.backend.dto;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 /*
  * Die Klasse dient zur Datenübertragung beim Erstellen eines neuen Estates
  * Danach kann aus den Daten erst ein Address-Objekt erstellt werden und dann ein Estate-Objekt
- * (Für das landlord-Attribut muss man über den Token erst den passenden AppUser finden)
+ * (Für das landlord-Attribut muss man z.B. über den Token erst den passenden AppUser finden)
  */
 
-public class EstateDto {
+public class EstateCreateDto {
 
-    // Estate Attribute
+    // Attribute
+    @NotBlank(message = "Titel darf nicht leer sein")
+    private String titel;
+
+    @NotNull(message = "Wohnform darf nicht null sein")
+    private String type;
+
     @NotNull(message = "Fläche muss angegeben werden")
     private Double area;
 
@@ -24,10 +32,9 @@ public class EstateDto {
     @NotNull(message = "Kaltmiete muss angegeben werden")
     private Double rentCold;
 
-    @NotNull(message = "Warmmiete muss angegeben werden")
-    private Double rentWarm;
+    @NotNull(message = "Verfügbarkeits-Datum darf nicht null sein")
+    private LocalDate availableFrom;
 
-    // Address Attribute
     @NotBlank(message = "Straße darf nicht leer sein")
     private String street;
 
@@ -40,10 +47,27 @@ public class EstateDto {
     @NotBlank(message = "Stadt darf nicht leer sein")
     private String city;
 
-    @NotBlank(message = "Land darf nicht leer sein")
-    private String country;
+    @NotNull(message = "Bild darf nicht null sein")
+    private String img;
+
 
     // Getter & Setter
+
+    public String getTitel() {
+        return titel;
+    }
+
+    public void setTitel(String titel) {
+        this.titel = titel;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public Double getArea() {
         return area;
@@ -77,12 +101,12 @@ public class EstateDto {
         this.rentCold = rentCold;
     }
 
-    public Double getRentWarm() {
-        return rentWarm;
+    public LocalDate getAvailableFrom() {
+        return availableFrom;
     }
 
-    public void setRentWarm(Double rentWarm) {
-        this.rentWarm = rentWarm;
+    public void setAvailableFrom(LocalDate availableFrom) {
+        this.availableFrom = availableFrom;
     }
 
     public String getStreet() {
@@ -117,11 +141,12 @@ public class EstateDto {
         this.city = city;
     }
 
-    public String getCountry() {
-        return country;
+    public String getImg() {
+        return img;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setImg(String img) {
+        this.img = img;
     }
+
 }

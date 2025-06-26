@@ -38,7 +38,7 @@ public class AppUser {
     @NotBlank(message = "Geschlecht darf nicht leer sein")
     private String gender;
 
-    @NotBlank(message = "Telefonnummer darf nicht leer sein")
+    @NotNull(message = "Telefonnummer darf nicht null sein")
     @Pattern(regexp = "^\\+?[0-9 ]{7,20}$", message = "Ungültige Telefonnummer")
     @Column(unique = true)
     private String phonenumber;
@@ -111,11 +111,11 @@ public class AppUser {
         this.id = id;
     }
 
-    public String getfirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setfirstName(String firstName) {        
+    public void setFirstName(String firstName) {        
         this.firstName = firstName;
     }
 

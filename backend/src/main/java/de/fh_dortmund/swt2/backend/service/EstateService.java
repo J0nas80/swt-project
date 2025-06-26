@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import de.fh_dortmund.swt2.backend.dto.EstateDto;
+import de.fh_dortmund.swt2.backend.dto.EstateCreateDto;
 import de.fh_dortmund.swt2.backend.model.Address;
 import de.fh_dortmund.swt2.backend.model.AppUser;
 import de.fh_dortmund.swt2.backend.model.Estate;
@@ -21,16 +21,17 @@ public class EstateService {
         this.appUserService = appUserService;
     }
 
-
-    public Estate saveEstate(EstateDto estateDto, String token) {
-        // Address erstellen, landlord(AppUser) durch token finden und daraus das Estate erstellen und speichern
+    public Estate saveEstate(EstateCreateDto estateDto, String token) {
+        // Address erstellen, landlord(AppUser) durch token finden und daraus das Estate
+        // erstellen und speichern
         Address address = new Address(estateDto.getStreet(), estateDto.getHouseNumber(), estateDto.getPostalCode(),
-                estateDto.getCity(), estateDto.getCountry());
+                estateDto.getCity(), "DE");
 
         AppUser landlord = appUserService.getUserFromToken(token);
 
-        Estate estate = new Estate(estateDto.getArea(), estateDto.getRoomCount(), estateDto.getDescription(),
-                estateDto.getRentCold(), estateDto.getRentWarm(), address, landlord);
+        Estate estate = new Estate(estateDto.getTitel(), estateDto.getType(), estateDto.getArea(),
+                estateDto.getRoomCount(), estateDto.getDescription(),
+                estateDto.getRentCold(), address, landlord, estateDto.getImg(), estateDto.getAvailableFrom());
 
         return estateRepository.save(estate);
     }

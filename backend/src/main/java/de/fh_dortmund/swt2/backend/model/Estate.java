@@ -25,33 +25,33 @@ public class Estate {
     @SequenceGenerator(name = "Estate_seq", sequenceName = "Estate_seq", allocationSize = 1)
     private Long id;
 
-    @NotNull(message = "Wohnform muss angegeben werden")
+    @NotBlank(message = "Titel darf nicht leer sein")
+    private String titel;
+
+    @NotNull(message = "Wohnform darf nicht null sein")
     private String type;
 
-    @NotNull(message = "Fläche muss angegeben werden")
+    @NotNull(message = "Fläche darf nicht null sein")
     private Double area;
 
-    @NotNull(message = "Zimmeranzahl muss angegeben werden")
+    @NotNull(message = "Zimmeranzahl darf nicht null sein")
     private Double roomCount;
 
-    @NotBlank(message = "Beschreibung darf nicht leer sein")
+    @NotNull(message = "Beschreibung darf nicht null sein")
     private String description;
 
-    @NotNull(message = "Kaltmiete muss angegeben werden")
+    @NotNull(message = "Kaltmiete darf nicht null sein")
     private Double rentCold;
 
-    @NotNull(message = "Warmmiete muss angegeben werden")
-    private Double rentWarm;
-
-    @NotNull(message = "Adresse darf nicht leer sein")
+    @NotNull(message = "Adresse darf nicht null sein")
     @Embedded
     private Address address;
 
     @ManyToOne
     private AppUser landlord;
 
-    @NotNull(message = "Pfad für Bild muss angegeben werden")
-    private String img;
+    @NotNull(message = "Bild darf nicht null sein")
+    private String img; // Base64
 
     @ManyToMany
     private List<AppUser> tenants = new LinkedList<AppUser>();
@@ -62,38 +62,40 @@ public class Estate {
     @Column(nullable = false)
     private boolean visible;
 
-    @Column(nullable = false)
+    @NotNull(message = "Verfügbarkeitsdatum darf nicht null sein")
     private LocalDate availableFrom;
 
     // Konstruktoren
     public Estate() {
     }
 
-    public Estate(String type, double area, double roomCount, String description, double rentCold, double rentWarm,
+    public Estate(String titel, String type, double area, double roomCount, String description, double rentCold,
             Address address,
             AppUser landLord, String img, LocalDate availableFrom) {
+        this.titel = titel;
         this.type = type;
         this.area = area;
         this.roomCount = roomCount;
         this.description = description;
         this.rentCold = rentCold;
-        this.rentWarm = rentWarm;
         this.address = address;
         this.landlord = landLord;
         this.validated = false;
         this.visible = false;
-        //Img über Base64
         this.img = img;
         this.availableFrom = availableFrom;
     }
 
     // Methoden
+
     // Muster: Fabrikmethode, implementiert als statische Methode zur Erzeugung von
     // Objekten
-    public static Estate createEstate(String type, double area, double roomCount, String description, double rentCold,
+    public static Estate createEstate(String titel, String type, double area, double roomCount, String description,
+            double rentCold,
             double rentWarm, Address address,
             AppUser landLord, String img, LocalDate availableFrom) {
-        Estate estate = new Estate(type, area, roomCount, description, rentCold, rentWarm, address, landLord, img,
+        Estate estate = new Estate(titel, type, area, roomCount, description, rentCold, address, landLord,
+                img,
                 availableFrom);
         estate.setValidated(false);
         estate.setVisible(false);
@@ -108,6 +110,7 @@ public class Estate {
         this.tenants.remove(tenant);
     }
 
+    
     // Getter & Setter
     public Long getId() {
         return id;
@@ -116,13 +119,20 @@ public class Estate {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public void addTenants(AppUser tenant) {
-        tenants.add(tenant);
+    public String getTitel(){
+        return this.titel;
     }
 
-    public void removeTenants(AppUser tenant) {
-        tenants.remove(tenant);
+    public void setTitel(String titel){
+        this.titel = titel;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public void setType(String type){
+        this.type = type;
     }
 
     public double getArea() {
@@ -157,14 +167,6 @@ public class Estate {
         this.rentCold = rentCold;
     }
 
-    public double getRentWarm() {
-        return rentWarm;
-    }
-
-    public void setRentWarm(double rentWarm) {
-        this.rentWarm = rentWarm;
-    }
-
     public Address getAddress() {
         return address;
     }
@@ -194,7 +196,7 @@ public class Estate {
     }
 
     public void setValidated(boolean validated) {
-        // Wird eine Immobilie validiert, ist sie direkt auch sichtbar und verfügbar
+        // Wird eine Immobilie validiert, wird sie auch sichtbar
         this.validated = validated;
         this.visible = validated;
     }
@@ -207,11 +209,11 @@ public class Estate {
         this.visible = visible;
     }
 
-    public LocalDate isAvailable() {
+    public LocalDate getAvailableFrom() {
         return availableFrom;
     }
 
-    public void setAvailable(LocalDate availableFrom) {
+    public void setAvailableFrom(LocalDate availableFrom) {
         this.availableFrom = availableFrom;
     }
 }

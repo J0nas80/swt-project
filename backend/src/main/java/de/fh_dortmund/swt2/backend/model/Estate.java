@@ -15,9 +15,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.io.*;
 
 @Entity
-public class Estate {
+public class Estate implements Serializable{
 
     // Attribute
     @Id

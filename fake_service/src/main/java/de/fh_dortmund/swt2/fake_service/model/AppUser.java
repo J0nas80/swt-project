@@ -1,62 +1,36 @@
-package de.fh_dortmund.swt2.backend.model;
+package de.fh_dortmund.swt2.fake_service.model;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;                // Für Entity, Id, Column, usw.
+import jakarta.persistence.CascadeType;
 import jakarta.validation.constraints.Pattern;  // Für Validierung der Telefonnummer
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email; 
 import java.io.*;
 
 @Entity
 public class AppUser implements Serializable {
-
-    //Attribute
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AppUser_seq")
     @SequenceGenerator(name = "AppUser_seq", sequenceName = "AppUser_seq", allocationSize = 1)
     private Long id;
-
-    @NotBlank(message = "Vorname darf nicht leer sein")
     private String firstName;
-
-    @NotBlank(message = "Nachname darf nicht leer sein")
     private String name;
-
-    @NotNull(message = "Geburtsdatum darf nicht null sein")
     private LocalDate dob;
-
-    @NotBlank(message = "E-Mail darf nicht leer sein")
+    @Column(unique = true)
     @Email(message = "Ungültige E-Mail-Adresse")
-    @Column(unique = true)
     private String email;
-
-    @NotBlank(message = "Geschlecht darf nicht leer sein")
     private String gender;
-
-    @NotNull(message = "Telefonnummer darf nicht null sein")
     @Pattern(regexp = "^\\+?[0-9 ]{7,20}$", message = "Ungültige Telefonnummer")
-    @Column(unique = true)
     private String phonenumber;
-
-    @NotBlank(message = "Passwort darf nicht leer sein")
-    @JsonIgnore
     private String password;
-
-    @Column(nullable = false)
     private boolean visible;
     
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
     private List<Estate> realEstates = new LinkedList<Estate>();
-
     @ManyToMany
     private List<Estate> history = new LinkedList<Estate>();
-    
     @ManyToMany
     private List<Estate> saved = new LinkedList<Estate>();
     // TODO: chatliste?
@@ -65,14 +39,13 @@ public class AppUser implements Serializable {
     // Konstruktoren
     public AppUser() {}
 
-    public AppUser(String firstName, String name, LocalDate dob, String email, String gender, String phonenumber, String password) {
+    public AppUser(String firstName, String name, LocalDate dob, String email, String gender, String phonenumber) {
         this.firstName = firstName;
         this.name = name;
         this.dob = dob;
         this.email = email;
         this.gender = gender;
         this.phonenumber = phonenumber;
-        this.password = password;
         this.visible = true;
     }
     
@@ -112,11 +85,11 @@ public class AppUser implements Serializable {
         this.id = id;
     }
 
-    public String getFirstName() {
+    public String getfirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {        
+    public void setfirstName(String firstName) {        
         this.firstName = firstName;
     }
 

@@ -1,6 +1,5 @@
 package de.fh_dortmund.swt2.backend.service;
 
-import de.fh_dortmund.swt2.backend.dto.LoginDto;
 import de.fh_dortmund.swt2.backend.dto.UserProfileDto;
 import de.fh_dortmund.swt2.backend.model.AppUser;
 import de.fh_dortmund.swt2.backend.model.Estate;
@@ -13,7 +12,6 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 import org.springframework.security.core.userdetails.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,65 +19,15 @@ public class AppUserService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
     private final EstateRepository estateRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AppUserService(AppUserRepository appUserRepository, EstateRepository estateRepository,
-            PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+
+    public AppUserService(AppUserRepository appUserRepository, EstateRepository estateRepository, JwtUtil jwtUtil) {
         this.appUserRepository = appUserRepository;
         this.estateRepository = estateRepository;
-        this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
-    // LOGIN UND REGISTRATION
-    /*
-     * Könnte man statdessen in eigene Service Klassen packen, hätten aber je nur
-     * eine Methode
-     * Oder vielleicht kombinieren zu AuthentifizierungController und
-     * AuthentifizierungService?
-     */
-    public AppUser saveUser(AppUser appUser) {
-        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        return appUserRepository.save(appUser);
-    }
-
-    /*
-     * ALTE VERSION (stand ursprünglich in LoginController)
-     * public ResponseEntity<?> login(LoginDto loginRequest) {
-     * try {
-     * AppUser user = appUserService.getByEmail(loginRequest.getEmail());
-     * 
-     * if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword()))
-     * {
-     * return
-     * ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falsches Passwort");
-     * }
-     * 
-     * String token = jwtUtil.generateToken(user.getEmail());
-     * 
-     * // gibt den Token als JSON zurück
-     * return ResponseEntity.ok(Map.of("token", token));
-     * 
-     * } catch (UsernameNotFoundException e) {
-     * return
-     * ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Benutzer nicht gefunden"
-     * );
-     * }
-     * }
-     */
-
-    // Neue Version: Service-Logik hier, HTTP-Logik im Controller
-    public String login(LoginDto loginRequest) {
-        AppUser user = this.getByEmail(loginRequest.getEmail());
-
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Falsches Passwort");
-        }
-        return jwtUtil.generateToken(user.getEmail());
-    }
-
-    // SONSTIGE USER METHODEN
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -88,6 +36,8 @@ public class AppUserService implements UserDetailsService {
         return new AppUserDetails(user);
     }
 
+    // Gibt zu Email passenden Nutzer
+    // Wird glaube ich gar nicht mehr genutzt (?)
     public AppUser getByEmail(String email) {
         return appUserRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Benutzer nicht gefunden: " + email));
@@ -117,7 +67,7 @@ public class AppUserService implements UserDetailsService {
     // Fügt Estate (anhand id) in saved-Liste hinzu
     public void saveEstate(AppUser user, Long id) {
         Estate estate = estateRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Estate mit ID " + id + "nicht gefunden"));
+                .orElseThrow(() -> new EntityNotFoundException("Estate mit ID " + id + " nicht gefunden"));
         user.saveEstate(estate);
     }
 

@@ -40,4 +40,14 @@ public class EstateService {
         return estateRepository.findAll();
     }
 
+    public Estate getEstateById(Long id){
+        return estateRepository.findById(id).orElse(null);
+    }
+
+    //Methode für exakten Filter
+    public List<Estate> searchEstateByFilters(String city, Double minPrice, Double maxPrice, String type){
+        return estateRepository.findByFilters(city, minPrice, maxPrice, type);
+    }
+
+
 }

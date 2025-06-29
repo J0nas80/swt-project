@@ -122,5 +122,5 @@ $RECYCLE.BIN/
 mosquitto.log
 mosquitto.db
 
-infratructure/postgre/data/
-infratructure/postgre/data/*
+infrastructure/postgre/data/
+infrastructure/postgre/data/*

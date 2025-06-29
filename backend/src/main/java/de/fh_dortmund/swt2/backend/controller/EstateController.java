@@ -37,5 +37,28 @@ public class EstateController {
         List<Estate> estates = estateService.getAllEstates();
         return ResponseEntity.ok(estates);
     }
+
+    //Filtered Inserate Search
+    @GetMapping
+    public ResponseEntity<?> searchEstates(
+        @RequestParam(required = false) String city,
+        @RequestParam(required = false) Double minPrice,
+        @RequestParam(required = false) Double maxPrice,
+        @RequestParam(required = false) String type
+    ){
+        List<Estate> result = estateService.searchEstateByFilters(city, minPrice, maxPrice, type);
+        return ResponseEntity.ok(result);
+    }
+
+    //Get Single Inserat
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getEstateById(@PathVariable Long id){
+        Estate estate = estateService.getEstateById(id);
+        if(estate != null){
+            return ResponseEntity.ok(estate);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
     
 }

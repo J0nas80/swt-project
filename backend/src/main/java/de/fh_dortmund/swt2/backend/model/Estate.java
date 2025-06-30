@@ -1,65 +1,118 @@
 package de.fh_dortmund.swt2.backend.model;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.io.*;
 
 @Entity
-public class Estate {
+public class Estate implements Serializable{
+
+    // Attribute
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Estate_seq")
+    @SequenceGenerator(name = "Estate_seq", sequenceName = "Estate_seq", allocationSize = 1)
     private Long id;
 
-    //Attribute
-    private double area;
-    private double roomCount;
+    @NotBlank(message = "Titel darf nicht leer sein")
+    private String titel;
+
+    @NotNull(message = "Wohnform darf nicht null sein")
+    private String type;
+
+    @NotNull(message = "Fläche darf nicht null sein")
+    private Double area;
+
+    @NotNull(message = "Zimmeranzahl darf nicht null sein")
+    private Double roomCount;
+
+    @NotNull(message = "Beschreibung darf nicht null sein")
     private String description;
-    private double rentCold;
-    private double rentWarm;
-    private String adress; //muss man vllt noch anpassen, wegen DB Datentyp?
+
+    @NotNull(message = "Kaltmiete darf nicht null sein")
+    private Double rentCold;
+
+    @NotNull(message = "Adresse darf nicht null sein")
+    @Embedded
+    private Address address;
+
     @ManyToOne
     private AppUser landlord;
+
+    @NotNull(message = "Bild darf nicht null sein")
+    private String img; // Base64
+
     @ManyToMany
     private List<AppUser> tenants = new LinkedList<AppUser>();
+
+    @Column(nullable = false)
     private boolean validated;
+
+    @Column(nullable = false)
     private boolean visible;
-    private boolean available;
 
+    @NotNull(message = "Verfügbarkeitsdatum darf nicht null sein")
+    private LocalDate availableFrom;
 
-    //Konstruktoren
-    public Estate(){}
+    // Konstruktoren
+    public Estate() {
+    }
 
-    public Estate(double area, double roomCount, String description, double rentCold, double rentWarm, String adress, AppUser landLord){
+    public Estate(String titel, String type, double area, double roomCount, String description, double rentCold,
+            Address address,
+            AppUser landLord, String img, LocalDate availableFrom) {
+        this.titel = titel;
+        this.type = type;
         this.area = area;
         this.roomCount = roomCount;
         this.description = description;
         this.rentCold = rentCold;
-        this.rentWarm = rentWarm;
-        this.adress = adress;
+        this.address = address;
         this.landlord = landLord;
-        validated = false;
-        visible = false;
-        available = false;
+        this.validated = false;
+        this.visible = false;
+        this.img = img;
+        this.availableFrom = availableFrom;
     }
 
-
     // Methoden
-    public void addTenant(AppUser tenant){
+
+    // Muster: Fabrikmethode, implementiert als statische Methode zur Erzeugung von
+    // Objekten
+    public static Estate createEstate(String titel, String type, double area, double roomCount, String description,
+            double rentCold,
+            double rentWarm, Address address,
+            AppUser landLord, String img, LocalDate availableFrom) {
+        Estate estate = new Estate(titel, type, area, roomCount, description, rentCold, address, landLord,
+                img,
+                availableFrom);
+        estate.setValidated(false);
+        estate.setVisible(false);
+        return estate;
+    }
+
+    public void addTenant(AppUser tenant) {
         this.tenants.add(tenant);
     }
 
-    public void removeTenant(AppUser tenant){
+    public void removeTenant(AppUser tenant) {
         this.tenants.remove(tenant);
     }
 
-
-    //Getter & Setter
+    
+    // Getter & Setter
     public Long getId() {
         return id;
     }
@@ -67,13 +120,20 @@ public class Estate {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public void addTenants(AppUser tenant){
-        tenants.add(tenant);
+    public String getTitel(){
+        return this.titel;
     }
 
-    public void removeTenants(AppUser tenant){
-        tenants.remove(tenant);
+    public void setTitel(String titel){
+        this.titel = titel;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public void setType(String type){
+        this.type = type;
     }
 
     public double getArea() {
@@ -108,20 +168,12 @@ public class Estate {
         this.rentCold = rentCold;
     }
 
-    public double getRentWarm() {
-        return rentWarm;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setRentWarm(double rentWarm) {
-        this.rentWarm = rentWarm;
-    }
-
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAdress(Address address) {
+        this.address = address;
     }
 
     public AppUser getLandlord() {
@@ -145,8 +197,9 @@ public class Estate {
     }
 
     public void setValidated(boolean validated) {
+        // Wird eine Immobilie validiert, wird sie auch sichtbar
         this.validated = validated;
-        // TODO: evtl. bei Validierung auch direkt sichtbar und verfügbar machen?
+        this.visible = validated;
     }
 
     public boolean isVisible() {
@@ -157,11 +210,11 @@ public class Estate {
         this.visible = visible;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public LocalDate getAvailableFrom() {
+        return availableFrom;
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setAvailableFrom(LocalDate availableFrom) {
+        this.availableFrom = availableFrom;
     }
 }

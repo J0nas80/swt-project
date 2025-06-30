@@ -1,8 +1,8 @@
 version: '0.2'
 services:
   backend:
-    image: ghcr.io/j0nas80/swt-project/backend
     container_name: backend
+    build: ./backend
     environment:
       HTTP_PORT: 8080
     env_file:
@@ -17,26 +17,26 @@ services:
       - swt-network
   
   fake_service:
-    image: ghcr.io/j0nas80/swt-project/fake_service
     container_name: fake_service
+    build: ./fake_service
     environment:
       HTTP_PORT: 8080
     env_file:
       - path: ./infrastructure/postgre/postgres.env
         required: true
-    depends_on:
+    depends_on: 
       - database
       - mqtt
     networks:
       - swt-network
   
   frontend:
-    image: ghcr.io/j0nas80/swt-project/frontend
     container_name: frontend
+    build: ./frontend
     environment:
       NODE_ENV: production
     ports:
-      - 3000:3000
+      - 5173:3000
 
   database:
     image: postgres:17
@@ -47,7 +47,6 @@ services:
         required: true
     volumes:
       - ./infrastructure/postgre/data:/var/lib/postgresql/data
-
 #    ports:
 #      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
     networks:

@@ -16,6 +16,7 @@ import de.fh_dortmund.swt2.fake_service.model.AppUser;
 import de.fh_dortmund.swt2.fake_service.model.Estate;
 import de.fh_dortmund.swt2.fake_service.repository.AppUserRepository;
 import de.fh_dortmund.swt2.fake_service.repository.EstateRepository;
+import de.fh_dortmund.swt2.fake_service.utils.messaging.MqttPublisherImpl;
 
 @Service
 public class EstateService {
@@ -23,6 +24,9 @@ public class EstateService {
 	//private static Faker faker = new Faker();
 	@Autowired
 	private AppUserRepository appUserRepository;
+
+	@Autowired
+	private MqttPublisherImpl mqttPublisher;
 
 	@Autowired
 	private EstateRepository estateRepository;
@@ -39,7 +43,9 @@ public class EstateService {
  
 		Estate e = new Estate(area, roomCount, "description", coldRent, warmRent, address, findRandomAppUser() );
 
-		return estateRepository.save(e);
+		e = estateRepository.save(e);
+		mqttPublisher.publishMessage("EstatePublished", Long.toString((long)e.getId()));
+		return e;
 	}
 
 	private AppUser findRandomAppUser() throws AppUserNotFoundException, Exception

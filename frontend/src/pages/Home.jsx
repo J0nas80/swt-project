@@ -17,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     // Replace URL with your actual backend route
-    axios.get("http://localhost:8080/api/inserate")
+    axios.get("http://localhost:8080/api/estate/all")
       .then((response) => {
         setProperties(response.data);
       })

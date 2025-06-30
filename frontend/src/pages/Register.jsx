@@ -40,14 +40,14 @@ export default function Register() {
     }
 
     try {
-      await axios.post("http://localhost:8080/api/register", {
-        vorname: formData.vorname,
-        nachname: formData.nachname,
-        geburtdatum: formData.geburtdatum,
-        geschlecht: formData.geschlecht,
+      await axios.post("http://localhost:8080/api/auth/register", {
+        firstName: formData.vorname,
+        name: formData.nachname,
+        dob: formData.geburtdatum,
+        gender: formData.geschlecht,
         email: formData.email,
-        telefon: formData.telefon,
-        passwort: formData.passwort,
+        phonenumber: formData.telefon,
+        password: formData.passwort,
       });
 
       // On success: navigate to login

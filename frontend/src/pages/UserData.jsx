@@ -16,7 +16,7 @@ export default function UserData() {
       return;
     }
 
-    axios.get("http://localhost:8080/api/user", {
+    axios.get("http://localhost:8080/api/user/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -56,16 +56,16 @@ export default function UserData() {
       <div style={styles.container}>
         <div style={styles.profile}>
           <img src={image} alt="User" style={styles.profileImage} />
-          <h2>{`${user.vorname} ${user.nachname}`}</h2>
+          <h2>{`${user.firstName} ${user.name}`}</h2>
         </div>
         <table style={styles.table}>
           <tbody>
-            <tr><td style={styles.tableCell}>Vorname</td><td style={styles.tableCell}>{user.vorname}</td></tr>
-            <tr><td style={styles.tableCell}>Nachname</td><td style={styles.tableCell}>{user.nachname}</td></tr>
-            <tr><td style={styles.tableCell}>Geburtsdatum</td><td style={styles.tableCell}>{user.geburtdatum}</td></tr>
-            <tr><td style={styles.tableCell}>Geschlecht</td><td style={styles.tableCell}>{user.geschlecht}</td></tr>
+            <tr><td style={styles.tableCell}>Vorname</td><td style={styles.tableCell}>{user.firstName}</td></tr>
+            <tr><td style={styles.tableCell}>Nachname</td><td style={styles.tableCell}>{user.name}</td></tr>
+            <tr><td style={styles.tableCell}>Geburtsdatum</td><td style={styles.tableCell}>{user.dob}</td></tr>
+            <tr><td style={styles.tableCell}>Geschlecht</td><td style={styles.tableCell}>{user.gender}</td></tr>
             <tr><td style={styles.tableCell}>E-Mail</td><td style={styles.tableCell}>{user.email}</td></tr>
-            <tr><td style={styles.tableCell}>Telefon</td><td style={styles.tableCell}>{user.telefon}</td></tr>
+            <tr><td style={styles.tableCell}>Telefon</td><td style={styles.tableCell}>{user.phonenumber}</td></tr>
           </tbody>
         </table>
       </div>

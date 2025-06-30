@@ -11,29 +11,34 @@ import Sidebar from "../components/Sidebar";
 export default function Saved() {
   const navigate = useNavigate();
   const [savedListings, setSavedListings] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      setError("Nicht eingeloggt.");
+      return;
+    }
 
-    axios.get("http://localhost:8080/api/user", {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then(res => {
-      const savedIds = res.data.savedListings || [];
-      return axios.get("http://localhost:8080/api/inserate");
-    }).then(res => {
-      const allListings = res.data;
-      const savedIds = JSON.parse(localStorage.getItem("saved")) || []; // optional fallback
-      const filtered = allListings.filter(item => savedIds.includes(item.id));
-      setSavedListings(filtered);
-    }).catch(err => console.error(err));
+    axios.get("http://localhost:8080/api/user/me/saved", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then(res => {
+      setSavedListings(res.data);
+    })
+    .catch(err => {
+      console.error(err);
+      setError("Fehler beim Laden der gespeicherten Inserate.");
+    });
   }, []);
 
   return (
     <div>
       <TopNav rightIcon={<Sidebar />} />
       <PageLayout>
-        {savedListings.length > 0 ? (
+        {error ? (
+          <p style={{ color: "red", padding: "20px" }}>{error}</p>
+        ) : savedListings.length > 0 ? (
           savedListings.map(item => (
             <div
               key={item.id}

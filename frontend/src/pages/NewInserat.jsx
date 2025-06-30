@@ -7,18 +7,21 @@ export default function InseratForm() {
   const [formData, setFormData] = useState({
     title: '',
     type: '',
-    description: '',
-    price: '',
-    address: '',
-    city: '',
     area: '',
-    access_from: '',
-    image: null
+    roomCount: '',
+    description: '',
+    rentCold: '',
+    availableFrom: '',
+    street: '',
+    houseNumber: '',
+    postalCode: '',
+    city: '',
+    img: null
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'image') {
+    if (name === 'img') {
       setFormData({ ...formData, image: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -35,7 +38,7 @@ export default function InseratForm() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/inserat', // Replace with actual backend endpoint
+        'http://localhost:8080/api/estate', // Replace with actual backend endpoint
         data,
         {
           headers: {
@@ -46,21 +49,23 @@ export default function InseratForm() {
 
       console.log('Inserat erfolgreich eingereicht:', response.data);
       alert('Inserat wurde erfolgreich eingereicht!');
-      // Optionally reset the form:
       setFormData({
         title: '',
         type: '',
-        description: '',
-        price: '',
-        address: '',
-        city: '',
         area: '',
-        access_from: '',
-        image: null
+        roomCount: '',
+        description: '',
+        rentCold: '',
+        availableFrom: '',
+        street: '',
+        houseNumber: '',
+        postalCode: '',
+        city: '',
+        img: null
       });
     } catch (error) {
-      console.error('Fehler beim Einreichen des Inserats:', error);
-      alert('Fehler beim Einreichen.');
+      console.error('Fehler beim Erstellen des Inserats:', error);
+      alert('Erstellen fehlgeschlagen.');
     }
   };
 
@@ -78,77 +83,24 @@ export default function InseratForm() {
           style={styles.input}
           required
         />
-        <select
-        name="type"
-        value={formData.type}
-        onChange={handleChange}
-        style={styles.input}
-        required
-        >
-        <option value="">Wohnform wählen</option>
-        <option value="CoHousing">CoHousing</option>
-        <option value="Mehrgenerationwohnung">Mehrgenerationwohnung</option>
-        <option value="Mikroappartement">Mikroappartement</option>
-        <option value="Baugruppe">Baugruppe</option>
+        <select name="type" value={formData.type} onChange={handleChange} style={styles.input} required>
+          <option value="">Wohnform wählen</option>
+          <option value="CoHousing">CoHousing</option>
+          <option value="Mehrgenerationwohnung">Mehrgenerationwohnung</option>
+          <option value="Mikroappartement">Mikroappartement</option>
+          <option value="Baugruppe">Baugruppe</option>
         </select>
-        <textarea
-          name="description"
-          placeholder="Beschreibung"
-          value={formData.description}
-          onChange={handleChange}
-          style={styles.textarea}
-          required
-        />
-        <input
-          type="number"
-          name="price"
-          placeholder="Preis (€)"
-          value={formData.price}
-          onChange={handleChange}
-          style={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Adresse"
-          value={formData.address}
-          onChange={handleChange}
-          style={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="city"
-          placeholder="Stadt"
-          value={formData.city}
-          onChange={handleChange}
-          style={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="area"
-          placeholder="Fläche (z. B. 120 m²)"
-          value={formData.area}
-          onChange={handleChange}
-          style={styles.input}
-        />
-        <input
-          type="date"
-          name="access_from"
-          placeholder="Zugang ab"
-          value={formData.access_from}
-          onChange={handleChange}
-          style={styles.input}
-        />
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleChange}
-          style={styles.input}
-        />
+
+        <input type="number" name="area" placeholder="Fläche (m²)" value={formData.area} onChange={handleChange} style={styles.input} required />
+        <input type="number" name="roomCount" placeholder="Anzahl Zimmer" value={formData.roomCount} onChange={handleChange} style={styles.input} required />
+        <textarea name="description" placeholder="Beschreibung" value={formData.description} onChange={handleChange} style={styles.textarea} required />
+        <input type="number" name="rentCold" placeholder="Kaltmiete (€)" value={formData.rentCold} onChange={handleChange} style={styles.input} required />
+        <input type="date" name="availableFrom" value={formData.availableFrom} onChange={handleChange} style={styles.input} required />
+        <input type="text" name="street" placeholder="Straße" value={formData.street} onChange={handleChange} style={styles.input} required />
+        <input type="text" name="houseNumber" placeholder="Hausnummer" value={formData.houseNumber} onChange={handleChange} style={styles.input} required />
+        <input type="text" name="postalCode" placeholder="PLZ" value={formData.postalCode} onChange={handleChange} style={styles.input} required />
+        <input type="text" name="city" placeholder="Stadt" value={formData.city} onChange={handleChange} style={styles.input} required />
+        <input type="file" name="img" accept="image/*" onChange={handleChange} style={styles.input} />
         <button
           type="submit"
           style={styles.button}

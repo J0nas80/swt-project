@@ -25,7 +25,7 @@ export default function FilterPage() {
         type: propertyType,
       });
 
-      const response = await axios.get(`http://localhost:8080/api/inserate?${query.toString()}`);
+      const response = await axios.get(`http://localhost:8080/api/estate?${query.toString()}`);
       console.log("Gefilterte Inserate:", response.data);
       setResults(response.data);
     } catch (error) {
@@ -120,7 +120,7 @@ export default function FilterPage() {
                   >
                     <h4>{item.title}</h4>
                     <p><strong>Stadt:</strong> {item.city}</p>
-                    <p><strong>Preis:</strong> {item.price} €</p>
+                    <p><strong>Kaltmiete:</strong> {item.rentCold} €</p>
                     <p><strong>Typ:</strong> {item.type}</p>
                     <p>{item.description}</p>
                   </li>

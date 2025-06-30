@@ -10,14 +10,14 @@ export default function ListingDetail() {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/inserate/${id}`)
+    axios.get(`http://localhost:8080/api/estate/${id}`)
       .then(res => {
         setListing(res.data);
       });
 
     const token = localStorage.getItem("token");
     if (token) {
-      axios.get("http://localhost:8080/api/user", {
+      axios.get("http://localhost:8080/api/user/me", {
         headers: { Authorization: `Bearer ${token}` }
       }).then(res => {
         const savedIds = res.data.savedListings || [];
@@ -34,7 +34,7 @@ export default function ListingDetail() {
     }
 
     axios.post(
-      `http://localhost:8080/api/user/save/${id}`,
+      `http://localhost:8080/api/user/me/saved/${id}`,
       {},
       { headers: { Authorization: `Bearer ${token}` } }
     ).then(() => {
@@ -50,10 +50,19 @@ export default function ListingDetail() {
       <TopNav />
       <div style={{ padding: "20px" }}>
         <h2>{listing.title}</h2>
-        <p><strong>Stadt:</strong> {listing.city}</p>
-        <p><strong>Typ:</strong> {listing.type}</p>
+        <h3>{listing.type}</h3>
         <p><strong>Beschreibung:</strong> {listing.description}</p>
-        <p><strong>Preis:</strong> {listing.price} €</p>
+        <p><strong>Fläche:</strong> {listing.area} m²</p>
+        <p><strong>Zimmer:</strong> {listing.roomCount}</p>
+        <p><strong>Kaltmiete:</strong> {listing.rentCold} €</p>
+        <p><strong>Verfügbar ab:</strong> {listing.availableFrom}</p>
+        <p><strong>Adresse:</strong> {listing.street} {listing.houseNumber}, {listing.postalCode} {listing.city}</p>
+        {listing.landlord?.username && (
+          <p><strong>Vermieter:</strong> {listing.landlord.username}</p>
+        )}
+        {listing.img && (
+          <img src={`http://localhost:8080/uploads/${listing.img}`} alt="Wohnung" style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }} />
+        )}
 
         <button onClick={handleSave} disabled={isSaved}>
           {isSaved ? "Gespeichert" : "Speichern"}

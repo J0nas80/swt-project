@@ -2,10 +2,16 @@ package de.fh_dortmund.swt2.backend.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import de.fh_dortmund.swt2.backend.model.AppUser;
+import de.fh_dortmund.swt2.backend.service.AppUserService;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -15,6 +21,9 @@ public class JwtUtil {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    @Autowired
+    private AppUserService appUserService; 
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
@@ -36,6 +45,19 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    // Nutzer aus Token zurückgeben 
+    public AppUser getUserFromToken(String token) {
+        String email = extractEmail(token); 
+        return appUserService.getByEmail(email);
+        
+    }
+
+    public Authentication getAuthentication(String token) {
+    String email = extractEmail(token);
+    UserDetails userDetails = appUserService.loadUserByUsername(email);
+    return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
     public boolean isValid(String token, String email) {

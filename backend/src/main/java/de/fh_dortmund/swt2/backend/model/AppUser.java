@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import jakarta.persistence.*;                // Für Entity, Id, Column, usw.
-import jakarta.persistence.CascadeType;
 import jakarta.validation.constraints.Pattern;  // Für Validierung der Telefonnummer
 import jakarta.validation.constraints.Email; 
 import java.io.*;
@@ -23,7 +22,7 @@ public class AppUser implements Serializable {
     private String email;
     private String gender;
     @Pattern(regexp = "^\\+?[0-9 ]{7,20}$", message = "Ungültige Telefonnummer")
-    private String phonenumber;
+    private String phoneNumber;
     private String password;
     private boolean visible;
     
@@ -45,7 +44,7 @@ public class AppUser implements Serializable {
         this.dob = dob;
         this.email = email;
         this.gender = gender;
-        this.phonenumber = phonenumber;
+        this.phoneNumber = phonenumber;
         this.visible = true;
     }
     
@@ -134,12 +133,12 @@ public class AppUser implements Serializable {
         this.password = password;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+        this.phoneNumber = phonenumber;
     }
 
     public boolean isVisible() {

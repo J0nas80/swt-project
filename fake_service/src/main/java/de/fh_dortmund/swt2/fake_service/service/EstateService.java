@@ -1,9 +1,7 @@
 package de.fh_dortmund.swt2.fake_service.service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,7 @@ import de.fh_dortmund.swt2.fake_service.model.AppUser;
 import de.fh_dortmund.swt2.fake_service.model.Estate;
 import de.fh_dortmund.swt2.fake_service.repository.AppUserRepository;
 import de.fh_dortmund.swt2.fake_service.repository.EstateRepository;
-import de.fh_dortmund.swt2.fake_service.utils.messaging.MqttPublisherImpl;
+import de.fh_dortmund.swt2.fake_service.utils.messaging.MqttImpl;
 
 @Service
 public class EstateService {
@@ -26,7 +24,7 @@ public class EstateService {
 	private AppUserRepository appUserRepository;
 
 	@Autowired
-	private MqttPublisherImpl mqttPublisher;
+	private MqttImpl mqttPublisher;
 
 	@Autowired
 	private EstateRepository estateRepository;

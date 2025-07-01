@@ -1,5 +1,7 @@
 package de.fh_dortmund.swt2.fake_service.utils.messaging;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -9,12 +11,15 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
-@Component
-public class MqttPublisherImpl extends MqttConfig implements MqttCallback{
+import de.fh_dortmund.swt2.fake_service.model.IObserver;
 
-	private static final String fota_fetch_record = "fota_fetch_record";
+@Component
+public class MqttImpl extends MqttConfig implements MqttCallback{
+
+	//private static final String fota_fetch_record = "fota_fetch_record";
     private String brokerUrl = null;
     final private String colon = ":";
     final private String clientId = UUID.randomUUID().toString();
@@ -22,20 +27,32 @@ public class MqttPublisherImpl extends MqttConfig implements MqttCallback{
     private MqttClient mqttClient = null;
     private MqttConnectOptions connectionOptions = null;
     private MemoryPersistence persistence = null;
+ 	private List<Pair<String, IObserver>> topicObserver;
+	
+	private static MqttImpl instance;
 
-	private MqttPublisherImpl() {
+	private MqttImpl() {
+		topicObserver = new LinkedList<Pair<String, IObserver>>();
         this.config();
     }
-    private MqttPublisherImpl(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
+
+    private MqttImpl(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
+		topicObserver = new LinkedList<Pair<String, IObserver>>();
         this.config(broker, port, ssl, withUserNamePass);
     }
-   public static MqttPublisherImpl getInstance() {
-        return new MqttPublisherImpl();
+
+   	public static MqttImpl getInstance() {
+		if(instance == null)
+			instance = new MqttImpl();
+        return instance;
     }
 
    
-    public static MqttPublisherImpl getInstance(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
-        return new MqttPublisherImpl(broker, port, ssl, withUserNamePass);
+    public static MqttImpl getInstance(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
+        if(instance == null)
+			instance = new MqttImpl(broker, port, ssl, withUserNamePass);
+
+		return instance;
     }
 
     public void publishMessage(String topic, String message) {
@@ -48,7 +65,10 @@ public class MqttPublisherImpl extends MqttConfig implements MqttCallback{
         } catch (MqttException me) {
         }
     }
-
+	
+	public void detach(IObserver observer) {
+		topicObserver.remove(topicObserver.stream().filter(x -> x.getValue1() == observer).findFirst().get());
+	}
     
     public void disconnect() {
         try {
@@ -58,21 +78,29 @@ public class MqttPublisherImpl extends MqttConfig implements MqttCallback{
     }
 
     @Override
-    public void connectionLost(Throwable arg0) {
-
+    public void connectionLost(Throwable cause) {
+		this.config();
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken arg0) {
-
+		
     }
 
     
     @Override
-    public void messageArrived(String arg0, MqttMessage arg1) throws Exception {
-        // Leave it blank for Publisher
-
+    public void messageArrived(String topic, MqttMessage message) throws Exception {
+    	topicObserver.stream().filter(p -> p.getValue0() == topic).forEach(p -> p.getValue1().update(new String(message.getPayload())));
     }
+
+	public void subscribeMessage(String topic, IObserver observer) {
+		try {
+			this.mqttClient.subscribe(topic, this.qos);
+			topicObserver.add(new Pair<String, IObserver>(topic, observer));
+		} catch(MqttException me) {
+			
+		}
+	}
 
     @Override
 	protected void config(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {

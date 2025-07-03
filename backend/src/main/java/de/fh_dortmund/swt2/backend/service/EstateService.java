@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import de.fh_dortmund.swt2.backend.dto.EstateCreateDto;
+import de.fh_dortmund.swt2.backend.factory.EstateFactory;
 import de.fh_dortmund.swt2.backend.model.Address;
 import de.fh_dortmund.swt2.backend.model.AppUser;
 import de.fh_dortmund.swt2.backend.model.Estate;
@@ -29,9 +30,11 @@ public class EstateService {
 
         AppUser landlord = appUserService.getUserFromToken(token);
 
-        Estate estate = new Estate(estateDto.getTitel(), estateDto.getType(), estateDto.getArea(),
+        Estate estate = EstateFactory.createEstate(estateDto.getTitel(), estateDto.getType(), estateDto.getArea(), estateDto.getRoomCount(),
+         estateDto.getDescription(), estateDto.getRentCold(), address, landlord, estateDto.getImg(), estateDto.getAvailableFrom());
+        /*Estate estate = new Estate(estateDto.getTitel(), estateDto.getType(), estateDto.getArea(),
                 estateDto.getRoomCount(), estateDto.getDescription(),
-                estateDto.getRentCold(), address, landlord, estateDto.getImg(), estateDto.getAvailableFrom());
+                estateDto.getRentCold(), address, landlord, estateDto.getImg(), estateDto.getAvailableFrom());*/
 
         return estateRepository.save(estate);
     }

@@ -3,7 +3,8 @@ package de.fh_dortmund.swt2.backend.model;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import jakarta.persistence.*;                // Für Entity, Id, Column, usw.
+import jakarta.persistence.*;  // Für Entity, Id, Column, usw.
+import jakarta.persistence.CascadeType;              
 import jakarta.validation.constraints.Pattern;  // Für Validierung der Telefonnummer
 import jakarta.validation.constraints.Email; 
 import java.io.*;

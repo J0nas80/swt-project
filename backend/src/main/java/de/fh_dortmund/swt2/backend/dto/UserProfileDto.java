@@ -21,7 +21,7 @@ public class UserProfileDto {
         this.dob = user.getDob();
         this.email = user.getEmail();
         this.gender = user.getGender();
-        this.phonenumber = user.getPhonenumber();
+        this.phonenumber = user.getPhoneNumber();
     }
 
     // Getter und Setter

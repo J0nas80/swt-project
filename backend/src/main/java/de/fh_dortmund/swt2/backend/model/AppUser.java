@@ -3,10 +3,8 @@ package de.fh_dortmund.swt2.backend.model;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.*;                // Für Entity, Id, Column, usw.
+import jakarta.persistence.*;  // Für Entity, Id, Column, usw.
+import jakarta.persistence.CascadeType;              
 import jakarta.validation.constraints.Pattern;  // Für Validierung der Telefonnummer
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -41,11 +39,7 @@ public class AppUser implements Serializable {
 
     @NotNull(message = "Telefonnummer darf nicht null sein")
     @Pattern(regexp = "^\\+?[0-9 ]{7,20}$", message = "Ungültige Telefonnummer")
-    @Column(unique = true)
-    private String phonenumber;
-
-    @NotBlank(message = "Passwort darf nicht leer sein")
-    @JsonIgnore
+    private String phoneNumber;
     private String password;
 
     @Column(nullable = false)
@@ -71,8 +65,7 @@ public class AppUser implements Serializable {
         this.dob = dob;
         this.email = email;
         this.gender = gender;
-        this.phonenumber = phonenumber;
-        this.password = password;
+        this.phoneNumber = phonenumber;
         this.visible = true;
     }
     
@@ -161,12 +154,12 @@ public class AppUser implements Serializable {
         this.password = password;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+        this.phoneNumber = phonenumber;
     }
 
     public boolean isVisible() {

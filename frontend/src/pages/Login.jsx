@@ -1,9 +1,29 @@
+import axios from "axios";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import TopNav from "../components/TopNav";
 import BottomNav from "../components/BottomNav";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/api/auth/login", {
+        email,
+        password,
+      });
+
+      // Save token, navigate, etc.
+      localStorage.setItem("token", response.data.token);
+      navigate("/home");
+    } catch (err) {
+      setError("Login fehlgeschlagen");
+    }
+  };
 
   return (
     <div style={{minHeight: "100vh", backgroundColor: "#1c1c1c", margin: 0, padding: 0, width: "100vw"}}>
@@ -15,13 +35,32 @@ export default function Login() {
           <p style={paragraphStyle}>
             Melde dich an, um fortzufahren
           </p>
+          <input
+            type="text"
+            placeholder="E-Mail"
+            style={inputStyle}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Passwort"
+            style={inputStyle}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-          <input type="text" placeholder="E-Mail" style={inputStyle} required/>
-          <input type="password" placeholder="Passwort" style={inputStyle} required/>
-
-          <button onClick={() => navigate("/")} style={buttonStyle}>
+          <button onClick={handleLogin} style={buttonStyle}>
             Login
           </button>
+
+          {error && (
+            <p style={{ color: "red", textAlign: "center", marginTop: "10px" }}>
+              {error}
+            </p>
+          )}
 
           <p style={{ marginTop: "15px", textAlign: "center" }}>
             Kein account?{" "}

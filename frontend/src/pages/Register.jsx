@@ -2,10 +2,22 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import TopNav from "../components/TopNav";
 import BottomNav from "../components/BottomNav";
+import axios from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
   const [visibleInputs, setVisibleInputs] = useState({});
+  const [formData, setFormData] = useState({
+    vorname: "",
+    nachname: "",
+    geburtdatum: "",
+    geschlecht: "",
+    email: "",
+    telefon: "",
+    passwort: "",
+    passwortBestaetigen: "",
+  });
+  const [error, setError] = useState("");
 
   const togglePasswordVisibility = (id) => {
     setVisibleInputs((prev) => ({
@@ -13,14 +25,40 @@ export default function Register() {
       [id]: !prev[id],
     }));
   };
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-  const fields = [
-    "Vorname", "Nachname", "Geburtdatum", "Geschlecht",
-    "E-Mail", "Telefon", "Passwort", "Passwort bestätigen"
-  ];
+  const handleRegister = async () => {
+    // Simple password match check
+    if (formData.passwort !== formData.passwortBestaetigen) {
+      setError("Passwörter stimmen nicht überein");
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:8080/api/auth/register", {
+        firstName: formData.vorname,
+        name: formData.nachname,
+        dob: formData.geburtdatum,
+        gender: formData.geschlecht,
+        email: formData.email,
+        phonenumber: formData.telefon,
+        password: formData.passwort,
+      });
+
+      // On success: navigate to login
+      navigate("/login");
+    } catch (err) {
+      setError("Registrierung fehlgeschlagen");
+    }
+  };
 
   return (
-    <div style={{minHeight: "100vh", color: "white", paddingBottom: "100px" }}>
+    <div style={{ minHeight: "100vh", color: "white", paddingBottom: "100px" }}>
       <TopNav />
 
       <div style={cardStyle}>
@@ -30,29 +68,34 @@ export default function Register() {
           <Link to="/login" style={{ color: "#007bff" }}>Log in</Link>
         </p>
 
-        {fields.map((field, idx) => {
-          const isPassword = field.toLowerCase().includes("passwort");
-          const isDate = field.toLowerCase().includes("geburtdatum");
+        {[
+          { label: "Vorname", name: "vorname" },
+          { label: "Nachname", name: "nachname" },
+          { label: "Geburtdatum", name: "geburtdatum", type: "date" },
+          { label: "Geschlecht", name: "geschlecht" },
+          { label: "E-Mail", name: "email" },
+          { label: "Telefon", name: "telefon" },
+          { label: "Passwort", name: "passwort", type: "password" },
+          { label: "Passwort bestätigen", name: "passwortBestaetigen", type: "password" },
+        ].map((field, idx) => {
           const inputId = `input-${idx}`;
-          const inputType = isPassword
+          const type = field.type === "password"
             ? visibleInputs[inputId] ? "text" : "password"
-            : isDate
-              ? "date"
-              : "text";
+            : field.type || "text";
 
           return (
             <div key={idx} style={{ position: "relative", margin: "10px 0" }}>
               <input
                 id={inputId}
-                type={inputType}
-                placeholder={field}
-                style={{
-                  ...inputStyle,
-                  // paddingRight: isPassword ? "40px" : "10px",
-                }}
+                name={field.name}
+                type={type}
+                placeholder={field.label}
+                value={formData[field.name]}
+                onChange={handleChange}
+                style={inputStyle}
                 required
               />
-              {isPassword && (
+              {field.type === "password" && (
                 <span
                   onClick={() => togglePasswordVisibility(inputId)}
                   style={eyeIconStyle}
@@ -64,9 +107,15 @@ export default function Register() {
           );
         })}
 
-        <button onClick={() => navigate("/login")} style={buttonStyle}>
+        <button onClick={handleRegister} style={buttonStyle}>
           Registrieren
         </button>
+
+        {error && (
+          <p style={{ color: "red", textAlign: "center", marginTop: "10px" }}>
+            {error}
+          </p>
+        )}
       </div>
 
       <BottomNav />

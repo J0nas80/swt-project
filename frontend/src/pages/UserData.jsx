@@ -1,19 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import TopNav from '../components/TopNav';
 import BottomNav from '../components/BottomNav';
 
-import image from "../assets/home.webp";
+import image from "../assets/profile.jpg";
 
 export default function UserData() {
-  const user = {
-    name: 'John Doe',
-    vorname: 'John',
-    nachname: 'Doe',
-    geschlecht: 'Männlich',
-    alter: 30,
-    beruf: 'Software Engineer',
-    adresse: '1234 Main St, City, Country',
-  };
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Nicht eingeloggt.");
+      return;
+    }
+
+    axios.get("http://localhost:8080/api/user/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    .then(response => {
+      setUser(response.data);
+    })
+    .catch(err => {
+      console.error(err);
+      setError("Fehler beim Laden der Benutzerdaten.");
+    });
+  }, []);
+
+  if (error) {
+    return (
+      <div>
+        <TopNav />
+        <p style={{ paddingTop: "200px", color: "red" }}>{error}</p>
+        <BottomNav title="UserData" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div>
+        <TopNav />
+        <p style={{ padding: "20px" }}>Lade Benutzerdaten...</p>
+        <BottomNav title="UserData" />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -21,40 +56,16 @@ export default function UserData() {
       <div style={styles.container}>
         <div style={styles.profile}>
           <img src={image} alt="User" style={styles.profileImage} />
-          <h2>{user.name}</h2>
+          <h2>{`${user.firstName} ${user.name}`}</h2>
         </div>
         <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.tableHeader}>Category</th>
-              <th style={styles.tableHeader}>Information</th>
-            </tr>
-          </thead>
           <tbody>
-            <tr>
-              <td style={styles.tableCell}>Vorname</td>
-              <td style={styles.tableCell}>{user.vorname}</td>
-            </tr>
-            <tr>
-              <td style={styles.tableCell}>Nachname</td>
-              <td style={styles.tableCell}>{user.nachname}</td>
-            </tr>
-            <tr>
-              <td style={styles.tableCell}>Geschlecht</td>
-              <td style={styles.tableCell}>{user.geschlecht}</td>
-            </tr>
-            <tr>
-              <td style={styles.tableCell}>Alter</td>
-              <td style={styles.tableCell}>{user.alter}</td>
-            </tr>
-            <tr>
-              <td style={styles.tableCell}>Beruf</td>
-              <td style={styles.tableCell}>{user.beruf}</td>
-            </tr>
-            <tr>
-              <td style={styles.tableCell}>Adresse</td>
-              <td style={styles.tableCell}>{user.adresse}</td>
-            </tr>
+            <tr><td style={styles.tableCell}>Vorname</td><td style={styles.tableCell}>{user.firstName}</td></tr>
+            <tr><td style={styles.tableCell}>Nachname</td><td style={styles.tableCell}>{user.name}</td></tr>
+            <tr><td style={styles.tableCell}>Geburtsdatum</td><td style={styles.tableCell}>{user.dob}</td></tr>
+            <tr><td style={styles.tableCell}>Geschlecht</td><td style={styles.tableCell}>{user.gender}</td></tr>
+            <tr><td style={styles.tableCell}>E-Mail</td><td style={styles.tableCell}>{user.email}</td></tr>
+            <tr><td style={styles.tableCell}>Telefon</td><td style={styles.tableCell}>{user.phonenumber}</td></tr>
           </tbody>
         </table>
       </div>

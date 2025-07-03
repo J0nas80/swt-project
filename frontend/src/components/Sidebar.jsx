@@ -46,7 +46,7 @@ export default function Sidebar() {
                             { to: "/saved", text: "Gespeichert" },
                             { to: "/in-progress", text: "Verlauf" },
                             { to: "/filter", text: "Filter" },
-                            { to: "/inserat-creating", text: "Inserat erstellen" },
+                            { to: "/inserat/new", text: "Inserat erstellen" },
                             { to: "/help-feedback", text: "Hilfe und Feedback" },
                             { to: "/user-data", text: "User Data" },
                         ].map((item) => (
@@ -60,35 +60,37 @@ export default function Sidebar() {
                     </ul>
 
                     <div style={{ marginTop: "auto", width: "100%" }}>
-                        
+
                         <div
                             style={{
-                                width: "calc(100% + 60px)",   
+                                width: "calc(100% + 60px)",
                                 height: "2px",
                                 backgroundColor: "white",
                                 margin: "20px -30px",
                             }}
                         ></div>
 
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-                            <div
-                                style={{
-                                    width: "40px",
-                                    height: "40px",
-                                    borderRadius: "50%",
-                                    backgroundColor: "#fff",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    marginRight: "10px",
-                                }}
-                            >
-                                <span style={{ fontSize: "20px" }}>👤</span>
+                        <Link to="/user-data" style={{ textDecoration: "none" }}>
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "20px", cursor: "pointer" }}>
+                                <div
+                                    style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        borderRadius: "50%",
+                                        backgroundColor: "#fff",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        marginRight: "10px",
+                                    }}
+                                >
+                                    <span style={{ fontSize: "20px" }}>👤</span>
+                                </div>
+                                <span style={{ color: "white", fontSize: "22px", fontWeight: "bold" }}>
+                                    Mein Profil
+                                </span>
                             </div>
-                            <span style={{ color: "white", fontSize: "22px", fontWeight: "bold" }}>
-                                Username
-                            </span>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             )}
@@ -107,7 +109,7 @@ const linkStyle = {
 };
 
 const underlineStyle = {
-    width: "calc(100% + 60px)",       
+    width: "calc(100% + 60px)",
     height: "2px",
     backgroundColor: "white",
     marginTop: "10px",

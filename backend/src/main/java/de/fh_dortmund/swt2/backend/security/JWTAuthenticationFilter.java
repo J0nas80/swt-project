@@ -28,31 +28,52 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        // --- START CRITICAL CHANGE ---
+        // Define paths that should be publicly accessible without JWT validation.
+        // This must match the paths you've set to permitAll() in your SecurityConfig.
+        String requestURI = request.getRequestURI();
+        if (requestURI.startsWith("/api/auth/register") || requestURI.startsWith("/api/auth/login")) {
+            // If it's a public path, simply proceed down the filter chain.
+            // Spring Security's authorizeHttpRequests will then handle the permitAll() rule.
+            filterChain.doFilter(request, response);
+            return; // IMPORTANT: Exit this filter immediately
+        }
+        // --- END CRITICAL CHANGE ---
+
+        // For all other paths, proceed with JWT validation
         String authHeader = request.getHeader("Authorization");
+        String token = null;
+        String email = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
+            token = authHeader.substring(7); // Extract the token after "Bearer "
             try {
-                String email = jwtUtil.extractEmail(token);
-
-                if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-
-                    if (jwtUtil.isValid(token, email)) {
-                        UsernamePasswordAuthenticationToken authToken =
-                                new UsernamePasswordAuthenticationToken(
-                                        userDetails, null, userDetails.getAuthorities());
-
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                    }
-                }
-
+                email = jwtUtil.extractEmail(token);
             } catch (Exception e) {
-                // Token ist ungültig oder abgelaufen – optional Logging
-                System.out.println("Ungültiger JWT: " + e.getMessage());
+                // Token is invalid or expired – log this for debugging, but don't stop the chain here
+                // If the token is invalid/expired for a protected resource, the .anyRequest().authenticated()
+                // will eventually lead to a 401 Unauthorized.
+                System.out.println("Invalid or expired JWT: " + e.getMessage());
             }
         }
 
+        // If email is found from token and no authentication is currently set in the context
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+            // Validate the token against the user details
+            if (token != null && jwtUtil.isValid(token, userDetails.getUsername())) { // Assuming isValid takes username/email
+                // Create an authentication object and set it in the SecurityContext
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                // Optionally set authentication details for logging/auditing
+                // authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+
+        // Continue the filter chain for all requests (after potential JWT processing or bypass)
         filterChain.doFilter(request, response);
     }
 }

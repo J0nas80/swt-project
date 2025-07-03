@@ -3,6 +3,7 @@ import axios from "axios";
 import PageLayout from "../components/PageLayout";
 import BottomNav from "../components/BottomNav";
 import TopNav from "../components/TopNav";
+import { Link } from "react-router-dom";
 
 export default function FilterPage() {
   const [location, setLocation] = useState("");
@@ -11,6 +12,7 @@ export default function FilterPage() {
   const [propertyType, setPropertyType] = useState("");
   const [loading, setLoading] = useState("");
   const [results, setResults] = useState([]);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,18 +20,38 @@ export default function FilterPage() {
     setResults([]);
 
     try {
-      const query = new URLSearchParams({
-        city: location,
-        minPrice,
-        maxPrice,
-        type: propertyType,
-      });
+      const token = localStorage.getItem('token'); // Get the token from localStorage
 
-      const response = await axios.get(`http://localhost:8080/api/estate?${query.toString()}`);
+      if (!token) {
+        console.warn('Kein JWT-Token gefunden. Kann Filter nicht anwenden.');
+        setError('Sie müssen angemeldet sein, um Filter anzuwenden.');
+        setLoading(false);
+        return; // Stop execution if no token
+      }
+
+      const query = new URLSearchParams();
+      if (location) query.append("city", location);
+      if (minPrice) query.append("minPrice", minPrice);
+      if (maxPrice) query.append("maxPrice", maxPrice);
+      if (propertyType) query.append("type", propertyType);
+
+      const response = await axios.get(`http://localhost:8080/api/estate?${query.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}` // <--- ADD THIS LINE: Send the Authorization header
+        }
+      });
       console.log("Gefilterte Inserate:", response.data);
       setResults(response.data);
-    } catch (error) {
-      console.error("Fehler beim Abrufen der Inserate:", error);
+    } catch (err) { // Changed 'error' to 'err' to avoid conflict with state variable
+      console.error("Fehler beim Abrufen der Inserate:", err);
+      setError('Fehler beim Abrufen der Inserate.'); // Generic error message
+      // Specific error handling for 403/401
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+        setError('Sitzung abgelaufen oder nicht autorisiert. Bitte melden Sie sich erneut an.');
+        // Optional: Token löschen und zum Login umleiten
+        // localStorage.removeItem('token');
+        // window.location.href = '/login';
+      }
     } finally {
       setLoading(false);
     }
@@ -100,38 +122,45 @@ export default function FilterPage() {
             Filter anwenden
           </button>
         </form>
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <div style={{ marginTop: "40px" }}>
+        <div style={{ marginTop: "40px" }}>
           {loading && <p>🔄 Lade Inserate...</p>}
           {results.length > 0 && (
             <div>
               <h3>🎯 Gefundene Inserate ({results.length})</h3>
               <ul style={{ listStyle: "none", padding: 0 }}>
                 {results.map((item) => (
-                  <li
+                  <Link
+                    to={`/listing/${item.id}`}
                     key={item.id}
-                    style={{
-                      padding: "15px",
-                      border: "1px solid #ddd",
-                      borderRadius: "8px",
-                      marginBottom: "15px",
-                      background: "#f9f9f9",
-                    }}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    <h4>{item.title}</h4>
-                    <p><strong>Stadt:</strong> {item.city}</p>
-                    <p><strong>Kaltmiete:</strong> {item.rentCold} €</p>
-                    <p><strong>Typ:</strong> {item.type}</p>
-                    <p>{item.description}</p>
-                  </li>
+                    <li
+                      style={{
+                        padding: "15px",
+                        border: "1px solid #ddd",
+                        borderRadius: "8px",
+                        marginBottom: "15px",
+                        background: "#f9f9f9",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <h4>{item.titel}</h4>
+                      <p><strong>Stadt:</strong> {item.city}</p>
+                      <p><strong>Kaltmiete:</strong> {item.rentCold} €</p>
+                      <p><strong>Typ:</strong> {item.type}</p>
+                      <p>{item.description}</p>
+                    </li>
+                  </Link>
                 ))}
               </ul>
             </div>
           )}
           {!loading && results.length === 0 && <p>🔍 Keine Inserate gefunden.</p>}
-        </div>  
+        </div>
       </PageLayout>
-      <BottomNav title="Filter"/>
+      <BottomNav title="Filter" />
     </div>
 
   );

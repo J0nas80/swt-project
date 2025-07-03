@@ -69,6 +69,7 @@ public class AppUserService implements UserDetailsService {
         Estate estate = estateRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Estate mit ID " + id + " nicht gefunden"));
         user.saveEstate(estate);
+        appUserRepository.save(user);
     }
 
     // Gibt die saved-liste des Users zurück

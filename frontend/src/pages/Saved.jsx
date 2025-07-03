@@ -51,11 +51,11 @@ export default function Saved() {
               }}
               onClick={() => navigate(`/listing/${item.id}`)}
             >
-              <img src={item.imageUrl || "/default.jpg"} alt={item.title} style={{ width: "100px", borderRadius: "8px" }} />
+              <img src={item.img || "/default.jpg"} alt={item.titel} style={{ width: "100px", borderRadius: "8px" }} />
               <div>
-                <h3>{item.title}</h3>
-                <p>{item.city}</p>
-                <p style={{ fontSize: "14px", color: "gray" }}>{item.price} €</p>
+                <h3>{item.titel}</h3>
+                <p>{item.address?.city}</p>
+                <p style={{ fontSize: "14px", color: "gray" }}>{item.rentCold} €</p>
               </div>
             </div>
           ))

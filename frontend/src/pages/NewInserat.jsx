@@ -5,7 +5,7 @@ import BottomNav from '../components/BottomNav';
 
 export default function InseratForm() {
   const [formData, setFormData] = useState({
-    title: '',
+    titel: '',
     type: '',
     area: '',
     roomCount: '',
@@ -22,7 +22,7 @@ export default function InseratForm() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'img') {
-      setFormData({ ...formData, image: files[0] });
+      setFormData({ ...formData, img: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -37,12 +37,21 @@ export default function InseratForm() {
     }
 
     try {
+      const token = localStorage.getItem('token'); // Assuming 'jwtToken' is the key
+
+      if (!token) {
+        alert('Sie müssen angemeldet sein, um ein Inserat zu erstellen.');
+        // Optionally redirect to login page
+        // window.location.href = '/login';
+        return;
+      }
       const response = await axios.post(
         'http://localhost:8080/api/estate', // Replace with actual backend endpoint
         data,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
           },
         }
       );
@@ -50,7 +59,7 @@ export default function InseratForm() {
       console.log('Inserat erfolgreich eingereicht:', response.data);
       alert('Inserat wurde erfolgreich eingereicht!');
       setFormData({
-        title: '',
+        titel: '',
         type: '',
         area: '',
         roomCount: '',
@@ -76,7 +85,7 @@ export default function InseratForm() {
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="text"
-          name="title"
+          name="titel"
           placeholder="Titel"
           value={formData.title}
           onChange={handleChange}

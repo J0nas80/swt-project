@@ -19,7 +19,7 @@ export default function Login() {
 
       // Save token, navigate, etc.
       localStorage.setItem("token", response.data.token);
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       setError("Login fehlgeschlagen");
     }

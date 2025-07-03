@@ -3,7 +3,7 @@ import axios from 'axios';
 import TopNav from '../components/TopNav';
 import BottomNav from '../components/BottomNav';
 
-import image from "../assets/home.webp";
+import image from "../assets/profile.jpg";
 
 export default function UserData() {
   const [user, setUser] = useState(null);

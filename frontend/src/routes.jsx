@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -15,9 +15,10 @@ import ListingDetail from './pages/ListingDetail';
 
 const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<Home />} />
+    <Route path="/" element={<Navigate to="/login" />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
+    <Route path="/home" element={<Home />} />
     <Route path="/saved" element={<Saved />} />
     <Route path="/in-progress" element={<InProgress />} />
     <Route path="/filter" element={<Filter />} />

@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import jakarta.persistence.*;  // Für Entity, Id, Column, usw.
 import jakarta.persistence.CascadeType;              
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.validation.constraints.Pattern;  // Für Validierung der Telefonnummer
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -39,19 +43,26 @@ public class AppUser implements Serializable {
 
     @NotNull(message = "Telefonnummer darf nicht null sein")
     @Pattern(regexp = "^\\+?[0-9 ]{7,20}$", message = "Ungültige Telefonnummer")
-    private String phoneNumber;
+    @Column(unique = true)
+    private String phonenumber;
+
+    @NotBlank(message = "Passwort darf nicht leer sein")
+    //@JsonIgnore
     private String password;
 
     @Column(nullable = false)
     private boolean visible;
     
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Estate> realEstates = new LinkedList<Estate>();
 
     @ManyToMany
+    @JsonIgnore
     private List<Estate> history = new LinkedList<Estate>();
     
     @ManyToMany
+    @JsonIgnore
     private List<Estate> saved = new LinkedList<Estate>();
     // TODO: chatliste?
 

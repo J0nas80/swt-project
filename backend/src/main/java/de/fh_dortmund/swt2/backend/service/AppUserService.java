@@ -68,6 +68,13 @@ public class AppUserService implements UserDetailsService {
     public void saveEstate(AppUser user, Long id) {
         Estate estate = estateRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Estate mit ID " + id + " nicht gefunden"));
+        // Prüfen, ob Estate bereits in der Liste ist
+        if(!user.getSaved().contains(estate)) {
+            user.saveEstate(estate);
+            appUserRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("Estate ist bereits in der Saved-Liste des Nutzers");
+        }
         user.saveEstate(estate);
         appUserRepository.save(user);
     }

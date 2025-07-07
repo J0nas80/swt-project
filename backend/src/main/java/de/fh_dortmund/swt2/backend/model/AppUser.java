@@ -76,7 +76,7 @@ public class AppUser implements Serializable {
         this.dob = dob;
         this.email = email;
         this.gender = gender;
-        this.phoneNumber = phonenumber;
+        this.phonenumber = phonenumber;
         this.visible = true;
     }
     
@@ -166,11 +166,11 @@ public class AppUser implements Serializable {
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return phonenumber;
     }
 
     public void setPhonenumber(String phonenumber) {
-        this.phoneNumber = phonenumber;
+        this.phonenumber = phonenumber;
     }
 
     public boolean isVisible() {

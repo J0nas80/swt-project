@@ -7,6 +7,7 @@ import PageLayout from "../components/PageLayout";
 import TopNav from "../components/TopNav";
 import BottomNav from "../components/BottomNav";
 import Sidebar from "../components/Sidebar";
+import homeImg from "../assets/home.webp";
 
 export default function Saved() {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export default function Saved() {
               }}
               onClick={() => navigate(`/listing/${item.id}`)}
             >
-              <img src={item.img || "/default.jpg"} alt={item.titel} style={{ width: "100px", borderRadius: "8px" }} />
+              <img src={item.img || homeImg} alt={item.titel} style={{ width: "100px", borderRadius: "8px" }} />
               <div>
                 <h3>{item.titel}</h3>
                 <p>{item.address?.city}</p>

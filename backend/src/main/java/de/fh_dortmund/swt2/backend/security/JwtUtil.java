@@ -22,8 +22,8 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Autowired
-    private AppUserService appUserService; 
+   // @Autowired
+    //private AppUserService appUserService; 
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
@@ -47,7 +47,7 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    // Nutzer aus Token zurückgeben 
+    /* Nutzer aus Token zurückgeben 
     public AppUser getUserFromToken(String token) {
         String email = extractEmail(token); 
         return appUserService.getByEmail(email);
@@ -58,7 +58,7 @@ public class JwtUtil {
     String email = extractEmail(token);
     UserDetails userDetails = appUserService.loadUserByUsername(email);
     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    }
+    }*/
 
     public boolean isValid(String token, String email) {
         try {

@@ -14,13 +14,14 @@ export default function Home() {
   const [chatOpen, setChatOpen] = useState(false);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Added error state
+  const [error, setError] = useState(null); 
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchProperties = async () => { // Renamed from fetchEstates to match properties state
       try {
         setLoading(true);
-        setError(null); // Clear previous errors
+        setError(null); // Reset error state before fetching
 
         const token = localStorage.getItem('token'); // Get the token from localStorage
 
@@ -55,10 +56,56 @@ export default function Home() {
     fetchProperties();
   }, []); // Empty dependency array means this runs once on component mount
 
-  // Callback function for the Filter component to update properties
-  const handleFilterApply = (filteredData) => {
-    setProperties(filteredData);
+  const handleSkip = () => {
+    if (currentIndex < properties.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setCurrentIndex(0); // Reset to the first property if at the end
+      alert("Keine weiteren Inserate. Beginne von vorne.");
+    }
   };
+  const handleSave = async () => {
+    const property = properties[currentIndex];
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.post(
+        `http://localhost:8080/api/user/me/saved/${property.id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert("Inserat gespeichert");
+      handleSkip(); // direkt zum nächsten Inserat
+    } catch (err) {
+      console.error("Fehler beim Speichern:", err);
+      alert("Fehler beim Speichern.");
+    }
+  };
+  const buttonRowStyle = {
+    display: "flex",
+    justifyContent: "center",
+    gap: "50px",
+    marginTop: "30px"
+  };
+
+  const skipButtonStyle = {
+    fontSize: "40px",
+    padding: "10px 20px",
+    backgroundColor: "#f8d7da",
+    border: "none",
+    borderRadius: "12px",
+    cursor: "pointer"
+  };
+
+  const saveButtonStyle = {
+    fontSize: "40px",
+    padding: "10px 20px",
+    backgroundColor: "#d4edda",
+    border: "none",
+    borderRadius: "12px",
+    cursor: "pointer"
+  };
+  const currentProperty = properties[currentIndex];
 
   return (
     <div>
@@ -74,31 +121,30 @@ export default function Home() {
       <ChatSidebar isOpen={chatOpen} onClose={() => setChatOpen(false)} />
 
       <PageLayout>
-        <h2>{properties.length} verfügbare Inserate</h2>
+        <h2>{properties.length - currentIndex} verbleibende Inserate</h2>
 
         {loading ? (
           <p>Inserate werden geladen...</p>
-        ) : error ? ( // Display error message if there's an error
-          <p style={{ color: 'red' }}>{error}</p>
-        ) : properties.length > 0 ? (
-          <div style={estateListStyle}> {/* Added a style div for grid layout */}
-            {properties.map((property) => (
-              <Link
-                to={`/listing/${property.id}`}
-                key={property.id}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <PropertyCard
-                  title={property.titel}
-                  city={property.address?.city}
-                  type={property.type}
-                  img={property.img}
-                />
-              </Link>
-            ))}
+        ) : error ? (
+          <p style={{ color: "red" }}>{error}</p>
+        ) : currentProperty ? (
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <Link to ={`/listing/${currentProperty.id}`}
+              style={{ textDecoration: "none", color: "inherit" }}>
+            <PropertyCard
+              title={currentProperty.titel}
+              city={currentProperty.address?.city}
+              type={currentProperty.type}
+              img={currentProperty.img}
+            />
+            </Link>
+            <div style={actionContainerStyle}>
+              <button onClick={handleSkip} style={buttonStyle}>❌</button>
+              <button onClick={handleSave} style={buttonStyle}>📥</button>
+            </div>
           </div>
         ) : (
-          <p>Keine Inserate gefunden.</p>
+          <p>Alle Inserate durchgesehen.</p>
         )}
       </PageLayout>
 
@@ -129,12 +175,4 @@ const buttonStyle = {
   background: "#fff",
   cursor: "pointer",
   boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-};
-const estateListStyle = {
-  //display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-  gap: '20px',
-  marginTop: '20px',
-  width: '100%',
-  maxWidth: '1200px',
 };

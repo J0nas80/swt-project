@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"; // Added useNavigate 
 import axios from "axios";
 import TopNav from "../components/TopNav";
 import BottomNav from "../components/BottomNav";
+import homeImg from "../assets/home.webp";
 
 export default function ListingDetail() {
   const { id } = useParams(); // ID from URL
@@ -75,8 +76,6 @@ export default function ListingDetail() {
       alert("Fehler beim Speichern des Inserats.");
       if (err.response && (err.response.status === 401 || err.response.status === 403)) {
         alert('Sitzung abgelaufen oder nicht autorisiert. Bitte melden Sie sich erneut an.');
-        // localStorage.removeItem('token');
-        // navigate('/login');
       }
     }
   };
@@ -85,32 +84,37 @@ export default function ListingDetail() {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
   if (!listing) return <p>Inserat nicht gefunden.</p>; // Handle case where listing is null after loading
 
+  const imageUrl = listing.img
+    ? `http://localhost:8080/uploads/${listing.img}`
+    : homeImg;
+
   return (
     <div>
       <TopNav />
-      <div style={{ padding: "20px", paddingTop: "70px" }}>
-        {/* Check for listing.title vs listing.titel based on your backend */}
-        <h2>{listing.title || listing.titel}</h2> {/* Use 'title' if you changed backend, fallback to 'titel' */}
-        <h3>{listing.type}</h3>
-        <p><strong>Beschreibung:</strong> {listing.description}</p>
-        <p><strong>Fläche:</strong> {listing.area} m²</p>
-        <p><strong>Zimmer:</strong> {listing.roomCount}</p>
-        <p><strong>Kaltmiete:</strong> {listing.rentCold} €</p>
-        <p><strong>Verfügbar ab:</strong> {listing.availableFrom}</p>
-        {/* Assuming address is an object with street, houseNumber, postalCode, city */}
-        {listing.address && (
-          <p><strong>Adresse:</strong> {listing.address.street} {listing.address.houseNumber}, {listing.address.postalCode} {listing.address.city}</p>
-        )}
-        {listing.landlord?.email && ( // Assuming landlord has an email or other identifier
-          <p><strong>Vermieter:</strong> {listing.landlord.email}</p>
-        )}
-        {listing.img && (
-          // Ensure your backend serves images from this path or adjust accordingly
-          <img src={`http://localhost:8080/uploads/${listing.img}`} alt="Wohnung" style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }} />
-        )}
+      <div style={containerStyle}>
+        <img src={imageUrl} alt="Wohnung" style={imageStyle} />
+
+        <h2 style={titleStyle}>{listing.title || listing.titel}</h2>
+        <h3 style={typeStyle}>{listing.type}</h3>
+
+        <div style={detailGrid}>
+          <p><strong>Beschreibung:</strong> {listing.description}</p>
+          <p><strong>Fläche:</strong> {listing.area} m²</p>
+          <p><strong>Zimmer:</strong> {listing.roomCount}</p>
+          <p><strong>Kaltmiete:</strong> {listing.rentCold} €</p>
+          <p><strong>Verfügbar ab:</strong> {listing.availableFrom}</p>
+          {listing.address && (
+            <p>
+              <strong>Adresse:</strong> {listing.address.street} {listing.address.houseNumber}, {listing.address.postalCode} {listing.address.city}
+            </p>
+          )}
+          {listing.landlord?.email && (
+            <p><strong>Vermieter:</strong> {listing.landlord.email}</p>
+          )}
+        </div>
 
         <button onClick={handleSave} disabled={isSaved} style={saveButtonStyle}>
-          {isSaved ? "Gespeichert" : "Speichern"}
+          {isSaved ? "Gespeichert" : "Inserat speichern"}
         </button>
       </div>
       <BottomNav />
@@ -118,12 +122,49 @@ export default function ListingDetail() {
   );
 }
 
+const containerStyle = {
+  padding: "24px",
+  paddingTop: "80px",
+  maxWidth: "700px",
+  margin: "0 auto",
+  paddingBottom: "80px",
+  //fontFamily: "Arial, sans-serif",
+};
+
+const imageStyle = {
+  width: "100%",
+  height: "300px",
+  objectFit: "cover",
+  borderRadius: "12px",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+  marginBottom: "20px",
+};
+
+const titleStyle = {
+  fontSize: "28px",
+  marginBottom: "8px",
+};
+
+const typeStyle = {
+  fontSize: "18px",
+  color: "#666",
+  marginBottom: "16px",
+};
+
+const detailGrid = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "5px",
+  fontSize: "16px",
+};
+
 const saveButtonStyle = {
-  padding: '10px 20px',
-  backgroundColor: '#007bff',
-  color: 'white',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  marginTop: '20px',
+  marginTop: "30px",
+  padding: "12px 24px",
+  backgroundColor: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "16px",
+  cursor: "pointer",
 };

@@ -21,7 +21,7 @@ public class RegistrationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-Mail wird bereits verwendet.");
         }
 
-        if (appUserRepository.existsByPhoneNumber(appUser.getPhoneNumber())) {
+        if (appUserRepository.existsByPhonenumber(appUser.getPhoneNumber())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Handynummer wird bereits verwendet.");
         }
 

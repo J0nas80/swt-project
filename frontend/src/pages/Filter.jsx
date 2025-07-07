@@ -147,7 +147,7 @@ export default function FilterPage() {
                       }}
                     >
                       <h4>{item.titel}</h4>
-                      <p><strong>Stadt:</strong> {item.city}</p>
+                      <p><strong>Stadt:</strong> {item.address.city}</p>
                       <p><strong>Kaltmiete:</strong> {item.rentCold} €</p>
                       <p><strong>Typ:</strong> {item.type}</p>
                       <p>{item.description}</p>

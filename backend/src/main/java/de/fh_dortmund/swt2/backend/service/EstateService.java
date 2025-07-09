@@ -20,17 +20,18 @@ import de.fh_dortmund.swt2.backend.utils.observer.IObserver;
 public class EstateService {
 
     private final EstateRepository estateRepository;
+
     private final AppUserService appUserService;
-	private final JwtUtil jwtUtil;
-	private final MqttSubscriber mqttSub;
-	private final MqttSender mqttSender;
+	  private final JwtUtil jwtUtil;
+	  private final MqttSubscriber mqttSub;
+	  private final MqttSender mqttSender;
 
     public EstateService(EstateRepository estateRepository, AppUserService appUserService, JwtUtil jwtUtil, MqttSender mqttSender, MqttSubscriber mqttSub) {
         this.estateRepository = estateRepository;
         this.appUserService = appUserService;
-		this.jwtUtil = jwtUtil;
-		this.mqttSub = mqttSub;
-		this.mqttSender = mqttSender;
+        this.jwtUtil = jwtUtil;
+        this.mqttSub = mqttSub;
+        this.mqttSender = mqttSender;
     }
 
     public Estate saveEstate(EstateCreateDto estateDto, String token) {

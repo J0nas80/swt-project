@@ -6,7 +6,6 @@ import de.fh_dortmund.swt2.backend.model.Estate;
 import de.fh_dortmund.swt2.backend.repository.AppUserRepository;
 import de.fh_dortmund.swt2.backend.repository.EstateRepository;
 import de.fh_dortmund.swt2.backend.security.AppUserDetails;
-import de.fh_dortmund.swt2.backend.security.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
@@ -19,13 +18,11 @@ public class AppUserService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
     private final EstateRepository estateRepository;
-   // private final JwtUtil jwtUtil;
 
 
     public AppUserService(AppUserRepository appUserRepository, EstateRepository estateRepository) {
         this.appUserRepository = appUserRepository;
         this.estateRepository = estateRepository;
-     //   this.jwtUtil = jwtUtil;
     }
 
 
@@ -37,27 +34,11 @@ public class AppUserService implements UserDetailsService {
     }
 
     // Gibt zu Email passenden Nutzer
-    // Wird glaube ich gar nicht mehr genutzt (?)
     public AppUser getByEmail(String email) {
         return appUserRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Benutzer nicht gefunden: " + email));
     }
 
-    // Nutzer aus Token zurückgeben
-   /* public AppUser getUserFromToken(String token) {
-        // Token kommt in Anfragen als "Bearer <token>", also muss "Bearer " ggf.
-        // abgeschnitten werden
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
-        }
-        // Email aus Token extrahieren und passenden AppUser zurückgeben
-        String email = jwtUtil.extractEmail(token);
-        if (email == null) {
-            throw new UsernameNotFoundException("Token ethält keine E-Mail");
-        }
-        return appUserRepository.findByEmail(email).orElseThrow(
-                () -> new UsernameNotFoundException("Nutzer nicht gefunden: " + email));
-    }*/
 
     // Gibt User-Profildaten zurück (NICHT history etc.)
     public UserProfileDto getUserProfile(AppUser user) {

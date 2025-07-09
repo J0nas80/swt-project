@@ -6,17 +6,19 @@ import org.springframework.web.bind.annotation.*;
 import de.fh_dortmund.swt2.backend.model.AppUser;
 import de.fh_dortmund.swt2.backend.security.JwtUtil;
 import de.fh_dortmund.swt2.backend.service.AppUserService;
+import de.fh_dortmund.swt2.backend.security.JwtUtil;
 
 @RestController
 @RequestMapping("api/user/me")
 public class AppUserController {
     
     private final AppUserService appUserService;
-	private JwtUtil jwtUtil;
+
+    private final JwtUtil jwtUtil;
 
     public AppUserController(AppUserService appUserService, JwtUtil jwtUtil) {
         this.appUserService = appUserService;
-		this.jwtUtil = jwtUtil;
+        this.jwtUtil= jwtUtil;
     }
 
     // Gibt User-Profildaten zurück (NICHT history etc.)

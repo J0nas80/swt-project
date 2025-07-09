@@ -1,4 +1,4 @@
-package de.fh_dortmund.swt2.fake_service.model;
+package de.fh_dortmund.swt2.fake_service.utils.observer;
 
 import org.springframework.stereotype.Component;
 
@@ -7,9 +7,7 @@ public class EstateValidationObserver implements IObserver {
 
 	@Override
 	public void update(String message) {
-		/**
-		 * TODO: do on update;
-		 */
+		System.out.println("message received: " + message);
 	}
 
 }

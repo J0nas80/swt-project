@@ -1,4 +1,4 @@
-package de.fh_dortmund.swt2.fake_service.model;
+package de.fh_dortmund.swt2.fake_service.utils.observer;
 
 
 

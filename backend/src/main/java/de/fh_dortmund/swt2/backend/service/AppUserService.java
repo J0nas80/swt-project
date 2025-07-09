@@ -19,13 +19,13 @@ public class AppUserService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
     private final EstateRepository estateRepository;
-    private final JwtUtil jwtUtil;
+   // private final JwtUtil jwtUtil;
 
 
-    public AppUserService(AppUserRepository appUserRepository, EstateRepository estateRepository, JwtUtil jwtUtil) {
+    public AppUserService(AppUserRepository appUserRepository, EstateRepository estateRepository) {
         this.appUserRepository = appUserRepository;
         this.estateRepository = estateRepository;
-        this.jwtUtil = jwtUtil;
+     //   this.jwtUtil = jwtUtil;
     }
 
 
@@ -44,7 +44,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     // Nutzer aus Token zurückgeben
-    public AppUser getUserFromToken(String token) {
+   /* public AppUser getUserFromToken(String token) {
         // Token kommt in Anfragen als "Bearer <token>", also muss "Bearer " ggf.
         // abgeschnitten werden
         if (token != null && token.startsWith("Bearer ")) {
@@ -57,7 +57,7 @@ public class AppUserService implements UserDetailsService {
         }
         return appUserRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("Nutzer nicht gefunden: " + email));
-    }
+    }*/
 
     // Gibt User-Profildaten zurück (NICHT history etc.)
     public UserProfileDto getUserProfile(AppUser user) {

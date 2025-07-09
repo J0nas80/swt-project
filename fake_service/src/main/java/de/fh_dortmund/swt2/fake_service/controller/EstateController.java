@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.*;
 import de.fh_dortmund.swt2.fake_service.exception.AppUserNotFoundException;
 import de.fh_dortmund.swt2.fake_service.model.Estate;
 import de.fh_dortmund.swt2.fake_service.service.EstateService;
-import de.fh_dortmund.swt2.fake_service.utils.messaging.MqttImpl;
+import de.fh_dortmund.swt2.fake_service.utils.messaging.MqttSender;
 
 @RestController
 @RequestMapping("/api/Estate")
 public class EstateController {
 	
 	@Autowired
-	private MqttImpl mqttPublisher;
+	private MqttSender mqttPublisher;
 
 	@Autowired
 	private EstateService estateService;
@@ -27,7 +27,8 @@ public class EstateController {
 	@GetMapping("/test/mqtt")
 	void createMqttTest()
 	{
-		mqttPublisher.publishMessage("Test", "test request ausgelöst");
-		
+		System.out.println("request received");
+		mqttPublisher.publishMessage("Estate", "test request ausgelöst");
+		System.out.println("message send");
 	}
 }

@@ -1,8 +1,10 @@
 package de.fh_dortmund.swt2.backend.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import de.fh_dortmund.swt2.backend.dto.LoginDto;
 import de.fh_dortmund.swt2.backend.model.AppUser;
@@ -26,6 +28,14 @@ public class AuthenticationService {
 
     public AppUser register(AppUser appUser) {
         // Neuen User abspeichern
+        // Prüfen, ob E-Mail oder Handynummer schon vergeben ist
+        if (appUserRepository.existsByEmail(appUser.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-Mail wird bereits verwendet.");
+        }
+
+        if (appUserRepository.existsByPhoneNumber(appUser.getPhoneNumber())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Handynummer wird bereits verwendet.");
+        }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return appUserRepository.save(appUser);
     }

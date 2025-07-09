@@ -38,7 +38,7 @@ public class AuthenticationService {
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Falsches Passwort");
         }
-        return jwtUtil.generateToken(user.getEmail());
+        return jwtUtil.generateToken(user);
     }
     
 }

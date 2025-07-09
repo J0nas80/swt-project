@@ -22,8 +22,8 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-   // @Autowired
-    //private AppUserService appUserService; 
+    @Autowired
+    private AppUserService appUserService; 
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
@@ -47,13 +47,13 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    /* Nutzer aus Token zurückgeben 
+    // Nutzer aus Token zurückgeben 
     public AppUser getUserFromToken(String token) {
         String email = extractEmail(token); 
         return appUserService.getByEmail(email);
         
     }
-
+/*
     public Authentication getAuthentication(String token) {
     String email = extractEmail(token);
     UserDetails userDetails = appUserService.loadUserByUsername(email);

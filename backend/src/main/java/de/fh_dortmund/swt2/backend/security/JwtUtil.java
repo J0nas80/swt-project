@@ -37,7 +37,7 @@ public class JwtUtil {
                 .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
     }
-
+    //Emailadresse aus dem Token extrahieren, Token wurde schon von "Bearer " im Filter bereinigt
     public String extractEmail(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())

@@ -9,16 +9,17 @@ import de.fh_dortmund.swt2.backend.model.Address;
 import de.fh_dortmund.swt2.backend.model.AppUser;
 import de.fh_dortmund.swt2.backend.model.Estate;
 import de.fh_dortmund.swt2.backend.repository.EstateRepository;
+import de.fh_dortmund.swt2.backend.security.JwtUtil;
 
 @Service
 public class EstateService {
 
     private final EstateRepository estateRepository;
-    private final AppUserService appUserService;
+    private final JwtUtil jwtUtil;
 
-    public EstateService(EstateRepository estateRepository, AppUserService appUserService) {
+    public EstateService(EstateRepository estateRepository, JwtUtil jwtUtil) {
         this.estateRepository = estateRepository;
-        this.appUserService = appUserService;
+        this.jwtUtil= jwtUtil;
     }
 
     public Estate saveEstate(EstateCreateDto estateDto, String token) {
@@ -27,7 +28,7 @@ public class EstateService {
         Address address = new Address(estateDto.getStreet(), estateDto.getHouseNumber(), estateDto.getPostalCode(),
                 estateDto.getCity(), "DE");
 
-        AppUser landlord = appUserService.getUserFromToken(token);
+        AppUser landlord = jwtUtil.getUserFromToken(token);
 
         Estate estate = new Estate(estateDto.getTitel(), estateDto.getType(), estateDto.getArea(),
                 estateDto.getRoomCount(), estateDto.getDescription(),

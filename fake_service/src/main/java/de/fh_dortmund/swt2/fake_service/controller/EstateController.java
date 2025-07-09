@@ -28,7 +28,7 @@ public class EstateController {
 	void createMqttTest()
 	{
 		System.out.println("request received");
-		mqttPublisher.publishMessage("Estate", "test request ausgelöst");
+		mqttPublisher.publishMessage("test", "test request ausgelöst");
 		System.out.println("message send");
 	}
 }

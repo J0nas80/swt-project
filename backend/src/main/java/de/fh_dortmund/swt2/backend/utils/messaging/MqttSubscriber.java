@@ -1,4 +1,4 @@
-package de.fh_dortmund.swt2.fake_service.utils.messaging;
+package de.fh_dortmund.swt2.backend.utils.messaging;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.stereotype.Component;
 
-import de.fh_dortmund.swt2.fake_service.utils.observer.IObserver;
+import de.fh_dortmund.swt2.backend.utils.observer.IObserver;
 
 @Component
 public class MqttSubscriber extends MqttConfig implements MqttCallback {

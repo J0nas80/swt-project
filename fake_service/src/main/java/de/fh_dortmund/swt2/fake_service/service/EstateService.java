@@ -63,4 +63,15 @@ public class EstateService {
 
 		return allUsers.get(index);
 	}
+
+	public void ValidateEstate(long id) {
+		Estate e = estateRepository.findById(id).orElse(null);
+
+		if(e == null)
+			return;
+		
+		e.setValidated(true);
+		estateRepository.save(e);
+
+	}
 }

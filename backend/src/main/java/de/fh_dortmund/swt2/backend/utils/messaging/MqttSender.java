@@ -1,4 +1,4 @@
-package de.fh_dortmund.swt2.fake_service.utils.messaging;
+package de.fh_dortmund.swt2.backend.utils.messaging;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,12 +13,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.stereotype.Component;
 
-import de.fh_dortmund.swt2.fake_service.utils.observer.IObserver;
-
 @Component
-public class MqttSubscriber extends MqttConfig implements MqttCallback {
-	
-	private String brokerUrl = null;
+public class MqttSender extends MqttConfig implements MqttCallback{
+
+	//private static final String fota_fetch_record = "fota_fetch_record";
+    private String brokerUrl = null;
     final private String colon = ":";
     final private String clientId = UUID.randomUUID().toString();
 
@@ -26,63 +25,58 @@ public class MqttSubscriber extends MqttConfig implements MqttCallback {
     private MqttConnectOptions connectionOptions = null;
     private MemoryPersistence persistence = null;
 
-	private List<IObserver> mqttObservers;
-
-	private MqttSubscriber() {
-		mqttObservers = new LinkedList<IObserver>();
+	private MqttSender() {
         this.config();
     }
 
-    private MqttSubscriber(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
-		mqttObservers = new LinkedList<IObserver>();
+    private MqttSender(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
         this.config(broker, port, ssl, withUserNamePass);
     }
 
-   	public static MqttSubscriber getInstance() {
-        return new MqttSubscriber();
+   	public static MqttSender getInstance() {
+        return new MqttSender();
     }
 
    
-    public static MqttSubscriber getInstance(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
-		return new MqttSubscriber(broker, port, ssl, withUserNamePass);
+    public static MqttSender getInstance(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
+		return new MqttSender(broker, port, ssl, withUserNamePass);
     }
 
-	public void registerObserver(IObserver observer)
-	{
-		mqttObservers.add(observer);
-	}
+    public void publishMessage(String topic, String message) {
 
-	public void removeObserver(IObserver observer)
-	{
-		mqttObservers.remove(observer);
-	}
+        try {
+            MqttMessage mqttmessage = new MqttMessage(message.getBytes());
+            mqttmessage.setQos(this.qos);
+            mqttmessage.setRetained(false);
+            this.mqttClient.publish(topic, mqttmessage);
+        } catch (MqttException me) {
+        }
+    }
+	
+    
+    public void disconnect() {
+        try {
+            this.mqttClient.disconnect();
+        } catch (MqttException me) {
+        }
+    }
 
-	public void subscribeMessage(String topic) {
-		try {
-			this.mqttClient.subscribe(topic, this.qos);	
-		} catch (MqttException me) {
-			System.out.println("Cannt Read Topic "+topic);
-		}
-	}
+    @Override
+    public void connectionLost(Throwable cause) {
+		this.config();
+    }
 
-	@Override
-	public void connectionLost(Throwable cause) {
-	}
+    @Override
+    public void deliveryComplete(IMqttDeliveryToken arg0) {
+		
+    }
+    
+    @Override
+    public void messageArrived(String topic, MqttMessage message) throws Exception {
+		throw new UnsupportedOperationException("Unimplemented method 'messageArrived'");
+    }
 
-	@Override
-	public void messageArrived(String topic, MqttMessage message) throws Exception {
-		for(IObserver o:mqttObservers) {
-			o.update(topic, new String(message.getPayload()));
-		}	
-	}
-
-	@Override
-	public void deliveryComplete(IMqttDeliveryToken token) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'deliveryComplete'");
-	}
-
-	@Override
+    @Override
 	protected void config(String broker, Integer port, Boolean ssl, Boolean withUserNamePass) {
         String protocol = this.TCP;
 
@@ -117,7 +111,5 @@ public class MqttSubscriber extends MqttConfig implements MqttCallback {
         } catch (MqttException me) {
 		//throw new com.bms.exceptions.MqttException("Not Connected");
         }
-    }
-
-
+    }	
 }

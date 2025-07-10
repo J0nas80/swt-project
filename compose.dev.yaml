@@ -24,6 +24,8 @@ services:
     env_file:
       - path: ./infrastructure/postgre/postgres.env
         required: true
+    ports:
+      - 8081:8080
     depends_on: 
       - database
       - mqtt

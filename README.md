@@ -22,22 +22,20 @@ Members: Houda Boulahoula, Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami C
 This section outlines the steps required to get your project up and running quickly:
 
 ```bash,ignore
-# Example: Start a PostgreSQL database using Docker
-$ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+# To build local and run all services
+$ docker compose -f compose.dev.yaml up --build 
 
-# Example: Start the project (e.g., using Spring Boot)
-$ ./mvnw spring-boot:ru
+# to start services build by github actions on main branch
+$ docker compose
 ```
 
 ## Prerequisites
 
 Detail all the necessary prerequisites for running your project, such as:
 
-Operating System: (e.g., Linux, macOS, Windows)
-
 Software: Docker, Java, Maven
 
-Ports: (e.g., port 8080, if applicable)
+Ports: can be configured in docker compose files
 
 ## Installation and Setup
 
@@ -82,7 +80,7 @@ Provide an overview of the directory structure to help contributors navigate the
 ProjectName/
 ├── backend/            # maven project with spring service providing RestApi
 ├── fake_service/       # simulates a third party service
-├── frontend            # Web Server providing UI view to the client
-├── infractructure      # database messagebrocker goes here.
+├── frontend/           # Web Server providing UI view to the client
+├── infrastructure/     # database and messagebrocker configuration goes here.
 └── README.md           # This file
 ```

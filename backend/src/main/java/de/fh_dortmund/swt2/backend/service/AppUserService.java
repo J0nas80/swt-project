@@ -20,7 +20,6 @@ public class AppUserService implements UserDetailsService {
     private final EstateRepository estateRepository;
 
 
-
     public AppUserService(AppUserRepository appUserRepository, EstateRepository estateRepository) {
         this.appUserRepository = appUserRepository;
         this.estateRepository = estateRepository;
@@ -39,6 +38,7 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Benutzer nicht gefunden: " + email));
     }
+
 
     // Gibt User-Profildaten zurück (NICHT history etc.)
     public UserProfileDto getUserProfile(AppUser user) {

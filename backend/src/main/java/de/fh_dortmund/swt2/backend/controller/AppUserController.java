@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import de.fh_dortmund.swt2.backend.model.AppUser;
+import de.fh_dortmund.swt2.backend.security.JwtUtil;
 import de.fh_dortmund.swt2.backend.service.AppUserService;
 import de.fh_dortmund.swt2.backend.security.JwtUtil;
 
@@ -12,6 +13,7 @@ import de.fh_dortmund.swt2.backend.security.JwtUtil;
 public class AppUserController {
     
     private final AppUserService appUserService;
+
     private final JwtUtil jwtUtil;
 
     public AppUserController(AppUserService appUserService, JwtUtil jwtUtil) {

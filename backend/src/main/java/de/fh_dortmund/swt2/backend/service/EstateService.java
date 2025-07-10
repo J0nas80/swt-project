@@ -2,6 +2,7 @@ package de.fh_dortmund.swt2.backend.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.fh_dortmund.swt2.backend.dto.EstateCreateDto;
@@ -10,16 +11,27 @@ import de.fh_dortmund.swt2.backend.model.AppUser;
 import de.fh_dortmund.swt2.backend.model.Estate;
 import de.fh_dortmund.swt2.backend.repository.EstateRepository;
 import de.fh_dortmund.swt2.backend.security.JwtUtil;
+import de.fh_dortmund.swt2.backend.utils.messaging.MqttSender;
+import de.fh_dortmund.swt2.backend.utils.messaging.MqttSubscriber;
+import de.fh_dortmund.swt2.backend.utils.observer.EstateValidationObserver;
+import de.fh_dortmund.swt2.backend.utils.observer.IObserver;
 
 @Service
 public class EstateService {
 
     private final EstateRepository estateRepository;
-    private final JwtUtil jwtUtil;
 
-    public EstateService(EstateRepository estateRepository, JwtUtil jwtUtil) {
+    private final AppUserService appUserService;
+	  private final JwtUtil jwtUtil;
+	  private final MqttSubscriber mqttSub;
+	  private final MqttSender mqttSender;
+
+    public EstateService(EstateRepository estateRepository, AppUserService appUserService, JwtUtil jwtUtil, MqttSender mqttSender, MqttSubscriber mqttSub) {
         this.estateRepository = estateRepository;
-        this.jwtUtil= jwtUtil;
+        this.appUserService = appUserService;
+        this.jwtUtil = jwtUtil;
+        this.mqttSub = mqttSub;
+        this.mqttSender = mqttSender;
     }
 
     public Estate saveEstate(EstateCreateDto estateDto, String token) {
@@ -34,7 +46,14 @@ public class EstateService {
                 estateDto.getRoomCount(), estateDto.getDescription(),
                 estateDto.getRentCold(), address, landlord, estateDto.getImg(), estateDto.getAvailableFrom());
 
-        return estateRepository.save(estate);
+        Estate e = estateRepository.save(estate);
+
+		IObserver validationObserver = new EstateValidationObserver(e);
+		mqttSub.registerObserver(validationObserver);
+		mqttSub.subscribeMessage("ValidationResult:"+e.getId().toString());
+		mqttSender.publishMessage("Estate", e.getId().toString());
+
+		return e;
     }
 
     public List<Estate> getAllEstates() {

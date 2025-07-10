@@ -28,8 +28,14 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        System.out.println("FILTER: " + request.getServletPath());
+        String path = request.getServletPath();
+        // registerspfad überspringen
+        if (path.equals("/api/auth/register") || path.equals("/api/auth/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         String authHeader = request.getHeader("Authorization");
-
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             try {

@@ -12,7 +12,7 @@ public class UserProfileDto {
     private LocalDate dob;
     private String email;
     private String gender;
-    private String phonenumber;
+    private String phoneNumber;
 
     // Konstruktoren
     public UserProfileDto(AppUser user){
@@ -21,7 +21,7 @@ public class UserProfileDto {
         this.dob = user.getDob();
         this.email = user.getEmail();
         this.gender = user.getGender();
-        this.phonenumber = user.getPhonenumber();
+        this.phoneNumber = user.getPhoneNumber();
     }
 
     // Getter und Setter
@@ -65,11 +65,11 @@ public class UserProfileDto {
         this.gender = gender;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setPhonenumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

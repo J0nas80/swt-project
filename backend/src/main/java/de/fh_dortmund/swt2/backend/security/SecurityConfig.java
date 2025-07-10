@@ -55,4 +55,9 @@ public class SecurityConfig {
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
+
+    @Bean
+    public ChatAccessProxy chatAccessProxy(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+    return new ChatAccessProxy(jwtUtil, userDetailsService);
+    }
 }

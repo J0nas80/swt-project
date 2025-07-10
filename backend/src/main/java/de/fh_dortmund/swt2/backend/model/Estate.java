@@ -87,21 +87,7 @@ public class Estate implements Serializable{
         this.availableFrom = availableFrom;
     }
 
-    // Methoden
-
-    // Muster: Fabrikmethode, implementiert als statische Methode zur Erzeugung von
-    // Objekten
-    public static Estate createEstate(String titel, String type, double area, double roomCount, String description,
-            double rentCold,
-            double rentWarm, Address address,
-            AppUser landLord, String img, LocalDate availableFrom) {
-        Estate estate = new Estate(titel, type, area, roomCount, description, rentCold, address, landLord,
-                img,
-                availableFrom);
-        estate.setValidated(false);
-        estate.setVisible(false);
-        return estate;
-    }
+    //Methoden
 
     public void addTenant(AppUser tenant) {
         this.tenants.add(tenant);

@@ -1,14 +1,14 @@
 package de.fh_dortmund.swt2.fake_service.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.fh_dortmund.swt2.fake_service.exception.AppUserNotFoundException;
+import de.fh_dortmund.swt2.fake_service.model.Address;
 
 //import com.github.javafaker;
 
@@ -16,6 +16,7 @@ import de.fh_dortmund.swt2.fake_service.model.AppUser;
 import de.fh_dortmund.swt2.fake_service.model.Estate;
 import de.fh_dortmund.swt2.fake_service.repository.AppUserRepository;
 import de.fh_dortmund.swt2.fake_service.repository.EstateRepository;
+import de.fh_dortmund.swt2.fake_service.utils.messaging.MqttSender;
 
 @Service
 public class EstateService {
@@ -23,6 +24,9 @@ public class EstateService {
 	//private static Faker faker = new Faker();
 	@Autowired
 	private AppUserRepository appUserRepository;
+
+	@Autowired
+	private MqttSender mqttPublisher;
 
 	@Autowired
 	private EstateRepository estateRepository;
@@ -35,11 +39,15 @@ public class EstateService {
 		double roomCount = randomizer.getRandomInt(3, 10);
 		double coldRent = area * randomizer.getRandomDouble(5.0, 20.0);
 		double warmRent = coldRent + randomizer.getRandomDouble(200.0, 1000.0);
-  		String address = "random Address" + LocalDateTime.now().toString();
- 
-		Estate e = new Estate(area, roomCount, "description", coldRent, warmRent, address, findRandomAppUser() );
+  		//String address = "random Address" + LocalDateTime.now().toString();
+		Address address = new Address("blocked", "blocked", "blocked", "blocked", "blocked");
 
-		return estateRepository.save(e);
+ 
+		Estate e = Estate.createEstate("Wohnraum der Stadt", "wohnung",  area, roomCount, "description", coldRent, warmRent, address, findRandomAppUser(), "", LocalDate.now() );
+
+		e = estateRepository.save(e);
+		mqttPublisher.publishMessage("EstatePublished", Long.toString((long)e.getId()));
+		return e;
 	}
 
 	private AppUser findRandomAppUser() throws AppUserNotFoundException, Exception
@@ -54,5 +62,16 @@ public class EstateService {
 		int index = randomizer.getRandomInt(allUsers.size());
 
 		return allUsers.get(index);
+	}
+
+	public void ValidateEstate(long id) {
+		Estate e = estateRepository.findById(id).orElse(null);
+
+		if(e == null)
+			return;
+		
+		e.setValidated(true);
+		estateRepository.save(e);
+
 	}
 }

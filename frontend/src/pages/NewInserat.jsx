@@ -87,7 +87,7 @@ export default function InseratForm() {
           type="text"
           name="titel"
           placeholder="Titel"
-          value={formData.title}
+          value={formData.titel}
           onChange={handleChange}
           style={styles.input}
           required

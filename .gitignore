@@ -121,6 +121,7 @@ $RECYCLE.BIN/
 # mqtt
 mosquitto.log
 mosquitto.db
+mosquitto.conf
 
 infrastructure/postgre/data/
 infrastructure/postgre/data/*

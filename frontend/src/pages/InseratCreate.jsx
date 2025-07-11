@@ -7,7 +7,7 @@ export default function InseratCreate() {
   const navigate = useNavigate();
 
   const dummyData = [
-    { image: "../assets/home.webp", category: "Auto", info: "BMW 320d, 2015" },
+    { image: "../assets/home.webp", category: "Wohnung", info: "2-Zimmer Wohnung, Dortmund" },
     { image: "../assets/home.webp", category: "Haus", info: "3-Zimmer Wohnung, Berlin" },
   ];
 

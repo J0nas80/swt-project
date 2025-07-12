@@ -12,37 +12,40 @@ Members: Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami Chaker, Yasmin Alma
 
 ```bash,ignore
 # clone repository
-$ git clone 
-# build local and run all services
-$ docker compose -f compose.dev.yaml up --build 
+$ git clone https://github.com/J0nas80/swt-project.git
+
+# build and run all services
+$ docker compose up -d --build 
 ```
 
 ## Prerequisites
 
-Detail all the necessary prerequisites for running your project, such as:
-
-Software: Docker, Java, Maven
-
-Ports: can be configured in docker compose files
+Software: Docker, git
 
 ## Installation and Setup
 
-Provide step-by-step instructions on how to clone the repository, install the project, and configure it:
-
 1. Clone the repository:
 ```bash,ignore
-$ git clone https://github.com/YourRepository.git
+$ git clone https://github.com/J0nas80/swt-project.git
 ```
 
 2. Navigate to the project directory:
 ```bash,ignore
-$ cd ProjectName
+$ cd path/to/swt-project
 ```
 
 3. Adjust configuration files:
+Modify configuration files as required.
+- Mosquitto Messagebroker:
+  - infrastructure/mosquitto/config/mosquitto.conf
+  - infrastructure/mosquitto/.env
+- PostgreSQL Database
+  - infrastructure/postgre/.env 
+- Portweiterleitung
+  - compose.yaml
 
-Modify configuration files (e.g., `.env`, `application.properties`) as required.
-
+Note that mosquittos .env file is used to give connection information to backend and fake_service containers.
+Make sure the configuration matches the mosquitto.conf file
 
 ## Running the Project
 
@@ -56,10 +59,7 @@ Starting the server
 
 ```bash,ignore
 # Example: Initialize the database
-$ ./init-db.sh
-
-# Start the project
-$ ./mvnw spring-boot:run
+docker compose up -d --build
 ```
 
 ## Project structure
@@ -70,5 +70,7 @@ ProjectName/
 ├── fake_service/       # simulates a third party service
 ├── frontend/           # Web Server providing UI view to the client
 ├── infrastructure/     # database and messagebrocker configuration goes here.
+├── compose.yaml        # compose file to build and start all services
 └── README.md           # This file
+
 ```

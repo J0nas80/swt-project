@@ -45,6 +45,7 @@ public class MqttSender extends MqttConfig implements MqttCallback{
     public void publishMessage(String topic, String message) {
 
         try {
+			System.out.println("publish message " + topic + ": " + message);
             MqttMessage mqttmessage = new MqttMessage(message.getBytes());
             mqttmessage.setQos(this.qos);
             mqttmessage.setRetained(false);

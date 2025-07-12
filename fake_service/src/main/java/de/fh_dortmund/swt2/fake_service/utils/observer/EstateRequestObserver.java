@@ -18,9 +18,9 @@ public class EstateRequestObserver implements IObserver {
 	public void update(String topic, String message) {
 		System.out.println("message on "+ topic +" received: " + message);
 
-		if(topic == "Estate") {
+		if(topic.equals("Estate")) {
 			try {
-				Thread.sleep(10000);
+				//Thread.sleep(10000);
 
 				long estateId = Long.parseLong(message);
 				estateService.ValidateEstate(estateId);

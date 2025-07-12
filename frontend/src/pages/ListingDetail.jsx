@@ -29,13 +29,13 @@ export default function ListingDetail() {
 
       try {
         // --- CRITICAL FIX: Add Authorization header to fetching listing details ---
-        const listingResponse = await axios.get(`http://localhost:8080/api/estate/${id}`, {
+        const listingResponse = await axios.get(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/estate/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setListing(listingResponse.data);
 
         // Fetch user data to check saved listings
-        const userResponse = await axios.get("http://localhost:8080/api/user/me", {
+        const userResponse = await axios.get(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/user/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const savedIds = userResponse.data.saved || []; // Assuming 'saved' is the field name for saved listings
@@ -65,7 +65,7 @@ export default function ListingDetail() {
 
     try {
       await axios.post( // Use await here
-        `http://localhost:8080/api/user/me/saved/${id}`,
+        `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/user/me/saved/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -85,7 +85,7 @@ export default function ListingDetail() {
   if (!listing) return <p>Inserat nicht gefunden.</p>; // Handle case where listing is null after loading
 
   const imageUrl = listing.img
-    ? `http://localhost:8080/uploads/${listing.img}`
+    ? `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/uploads/${listing.img}`
     : homeImg;
 
   return (

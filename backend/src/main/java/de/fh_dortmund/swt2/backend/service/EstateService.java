@@ -60,7 +60,7 @@ public class EstateService {
     }
 
     public List<Estate> getAllEstates() {
-        return estateRepository.findAll();
+        return estateRepository.findAllValid();
     }
 
     public Estate getEstateById(Long id){

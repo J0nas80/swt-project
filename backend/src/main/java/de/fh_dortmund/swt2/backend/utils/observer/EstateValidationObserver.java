@@ -12,6 +12,7 @@ public class EstateValidationObserver implements IObserver {
 
 	public EstateValidationObserver(Estate estateToValidate)
 	{
+		System.out.println("Observer for Estate " + estateToValidate.getId() );
 		this.estateToValidate = estateToValidate;
 	}
 
@@ -27,9 +28,9 @@ public class EstateValidationObserver implements IObserver {
 	public void update(String topic, String message) {
 		System.out.println("message on "+ topic +" received: " + message);
 
-		if(topic == "ValidationResult:"+estateToValidate.getId().toString()) {
+		if(topic.equals("ValidationResult:"+estateToValidate.getId().toString())) {
 			if (message.startsWith("Success")) {
-				// send message to Owner	
+	
 			}
 			else
 			{

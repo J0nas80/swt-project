@@ -40,7 +40,7 @@ public class Estate implements Serializable{
     @NotNull(message = "Zimmeranzahl darf nicht null sein")
     private Double roomCount;
 
-    @NotNull(message = "Beschreibung darf nicht null sein")
+    //@NotNull(message = "Beschreibung darf nicht null sein")
     private String description;
 
     @NotNull(message = "Kaltmiete darf nicht null sein")

@@ -33,7 +33,7 @@ export default function Home() {
         }
 
         // Fetch all properties from the API
-        const response = await axios.get("http://localhost:8080/api/estate/all", {
+        const response = await axios.get(`http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}/api/estate/all`, {
           headers: {
             'Authorization': `Bearer ${token}` 
           }
@@ -70,7 +70,7 @@ export default function Home() {
 
     try {
       await axios.post(
-        `http://localhost:8080/api/user/me/saved/${property.id}`,
+        `http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}/api/user/me/saved/${property.id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

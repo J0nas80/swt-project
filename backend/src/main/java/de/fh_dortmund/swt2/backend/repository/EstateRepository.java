@@ -14,9 +14,14 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
     "(:city IS NULL or e.address.city = :city) AND " + 
     "(:minPrice IS NULL or e.rentCold >= :minPrice) AND " + 
     "(:maxPrice IS NULL or e.rentCold <= :maxPrice) AND " + 
-    "(:type IS NULL or e.type = :type)")
+    "(:type IS NULL or e.type = :type) AND " +
+	"e.validated = TRUE")
     List<Estate> findByFilters(@Param("city") String city, 
                                @Param("minPrice") Double minPrice,
                                @Param("maxPrice") Double maxPrice,
                                @Param("type") String type);
+
+	@Query("SELECT e from Estate e WHERE "+
+		"e.validated = TRUE")
+	List<Estate> findAllValid();
 }

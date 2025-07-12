@@ -26,7 +26,7 @@ public class EstateCreateDto {
     @NotNull(message = "Zimmeranzahl muss angegeben werden")
     private Double roomCount;
 
-    @NotBlank(message = "Beschreibung darf nicht leer sein")
+   // @NotBlank(message = "Beschreibung darf nicht leer sein")
     private String description;
 
     @NotNull(message = "Kaltmiete muss angegeben werden")

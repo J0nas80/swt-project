@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -49,9 +51,10 @@ public class Estate implements Serializable{
     private Address address;
 
     @ManyToOne
+    @JsonBackReference
     private AppUser landlord;
 
-    @NotNull(message = "Bild darf nicht null sein")
+    //@NotNull(message = "Bild darf nicht null sein")
     private String img; // Base64
 
     @ManyToMany

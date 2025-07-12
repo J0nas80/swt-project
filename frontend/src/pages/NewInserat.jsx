@@ -1,31 +1,81 @@
 import { useState } from 'react';
+import axios from 'axios';
 import TopNav from '../components/TopNav';
 import BottomNav from '../components/BottomNav';
 
 export default function InseratForm() {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    price: '',
-    address: '',
-    city: '',
+    titel: '',
+    type: '',
     area: '',
-    access_from: '',
-    image: null
+    roomCount: '',
+    description: '',
+    rentCold: '',
+    availableFrom: '',
+    street: '',
+    houseNumber: '',
+    postalCode: '',
+    city: '',
+    img: null
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'image') {
-      setFormData({ ...formData, image: files[0] });
+    if (name === 'img') {
+      setFormData({ ...formData, img: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Inserat submitted:', formData);
+
+    const data = new FormData();
+    for (const key in formData) {
+      data.append(key, formData[key]);
+    }
+
+    try {
+      const token = localStorage.getItem('token'); // Assuming 'jwtToken' is the key
+
+      if (!token) {
+        alert('Sie müssen angemeldet sein, um ein Inserat zu erstellen.');
+        // Optionally redirect to login page
+        // window.location.href = '/login';
+        return;
+      }
+      const response = await axios.post(
+        'http://localhost:8080/api/estate', // Replace with actual backend endpoint
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+          },
+        }
+      );
+
+      console.log('Inserat erfolgreich eingereicht:', response.data);
+      alert('Inserat wurde erfolgreich eingereicht!');
+      setFormData({
+        titel: '',
+        type: '',
+        area: '',
+        roomCount: '',
+        description: '',
+        rentCold: '',
+        availableFrom: '',
+        street: '',
+        houseNumber: '',
+        postalCode: '',
+        city: '',
+        img: null
+      });
+    } catch (error) {
+      console.error('Fehler beim Erstellen des Inserats:', error);
+      alert('Erstellen fehlgeschlagen.');
+    }
   };
 
   return (
@@ -35,71 +85,31 @@ export default function InseratForm() {
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="text"
-          name="title"
+          name="titel"
           placeholder="Titel"
-          value={formData.title}
+          value={formData.titel}
           onChange={handleChange}
           style={styles.input}
           required
         />
-        <textarea
-          name="description"
-          placeholder="Beschreibung"
-          value={formData.description}
-          onChange={handleChange}
-          style={styles.textarea}
-          required
-        />
-        <input
-          type="number"
-          name="price"
-          placeholder="Preis (€)"
-          value={formData.price}
-          onChange={handleChange}
-          style={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Adresse"
-          value={formData.address}
-          onChange={handleChange}
-          style={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="city"
-          placeholder="Stadt"
-          value={formData.city}
-          onChange={handleChange}
-          style={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="area"
-          placeholder="Fläche (z. B. 120 m²)"
-          value={formData.area}
-          onChange={handleChange}
-          style={styles.input}
-        />
-        <input
-          type="date"
-          name="access_from"
-          placeholder="Zugang ab"
-          value={formData.access_from}
-          onChange={handleChange}
-          style={styles.input}
-        />
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleChange}
-          style={styles.input}
-        />
+        <select name="type" value={formData.type} onChange={handleChange} style={styles.input} required>
+          <option value="">Wohnform wählen</option>
+          <option value="CoHousing">CoHousing</option>
+          <option value="Mehrgenerationwohnung">Mehrgenerationwohnung</option>
+          <option value="Mikroappartement">Mikroappartement</option>
+          <option value="Baugruppe">Baugruppe</option>
+        </select>
+
+        <input type="number" name="area" placeholder="Fläche (m²)" value={formData.area} onChange={handleChange} style={styles.input} required />
+        <input type="number" name="roomCount" placeholder="Anzahl Zimmer" value={formData.roomCount} onChange={handleChange} style={styles.input} required />
+        <textarea name="description" placeholder="Beschreibung" value={formData.description} onChange={handleChange} style={styles.textarea} required />
+        <input type="number" name="rentCold" placeholder="Kaltmiete (€)" value={formData.rentCold} onChange={handleChange} style={styles.input} required />
+        <input type="date" name="availableFrom" value={formData.availableFrom} onChange={handleChange} style={styles.input} required />
+        <input type="text" name="street" placeholder="Straße" value={formData.street} onChange={handleChange} style={styles.input} required />
+        <input type="text" name="houseNumber" placeholder="Hausnummer" value={formData.houseNumber} onChange={handleChange} style={styles.input} required />
+        <input type="text" name="postalCode" placeholder="PLZ" value={formData.postalCode} onChange={handleChange} style={styles.input} required />
+        <input type="text" name="city" placeholder="Stadt" value={formData.city} onChange={handleChange} style={styles.input} required />
+        <input type="file" name="img" accept="image/*" onChange={handleChange} style={styles.input} />
         <button
           type="submit"
           style={styles.button}

@@ -3,6 +3,10 @@ package de.fh_dortmund.swt2.backend.model;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;  // Für Entity, Id, Column, usw.
 import jakarta.persistence.CascadeType;              
 import jakarta.validation.constraints.Pattern;  // Für Validierung der Telefonnummer
@@ -39,6 +43,7 @@ public class AppUser implements Serializable {
 
     @NotNull(message = "Telefonnummer darf nicht null sein")
     @Pattern(regexp = "^\\+?[0-9 ]{7,20}$", message = "Ungültige Telefonnummer")
+    @Column(name = "phonenumber", unique = true)
     private String phoneNumber;
     private String password;
 
@@ -46,8 +51,10 @@ public class AppUser implements Serializable {
     private boolean visible;
     
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Estate> realEstates = new LinkedList<Estate>();
 
+    @JsonIgnore
     @ManyToMany
     private List<Estate> history = new LinkedList<Estate>();
     

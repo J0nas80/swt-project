@@ -47,7 +47,7 @@ public class EstateCreateDto {
     @NotBlank(message = "Stadt darf nicht leer sein")
     private String city;
 
-    @NotNull(message = "Bild darf nicht null sein")
+    //@NotNull(message = "Bild darf nicht null sein")
     private String img;
 
 

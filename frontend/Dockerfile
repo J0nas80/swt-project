@@ -6,4 +6,3 @@ RUN npm i -g serve
 COPY . .
 RUN npm run build
 CMD [ "serve", "-s", "dist" ]
-

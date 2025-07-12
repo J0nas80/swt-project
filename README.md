@@ -1,32 +1,20 @@
 # Template repository for the Software Engineering lecture
 
-> [!IMPORTANT]
-> Replace this README with a detailed description of your project, your team, and instructions on how to run it.
-
-> [!IMPORTANT]
-> If you choose to keep your repository private, make sure to invite all your team members and teaching staff. Ask for their usernames if needed.
-
-Provide a general introduction to your project. Describe the purpose, goals, and the technologies used. Explain the value your project offers.
-
 ## Team
-List the team members involved in the project:
 
-Team Leader: Boulahoula, Houda
+Team Leader: Sami Chaker
 
-Members: Houda Boulahoula, Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami Chaker, Yasmin Almadad, Jonas Haschke 
+Members: Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami Chaker, Yasmin Almadad, Jonas Haschke 
 
 
 
 ## Quickstart
 
-This section outlines the steps required to get your project up and running quickly:
-
 ```bash,ignore
-# To build local and run all services
+# clone repository
+$ git clone 
+# build local and run all services
 $ docker compose -f compose.dev.yaml up --build 
-
-# to start services build by github actions on main branch
-$ docker compose
 ```
 
 ## Prerequisites

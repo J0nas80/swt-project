@@ -6,8 +6,6 @@ Team Leader: Sami Chaker
 
 Members: Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami Chaker, Yasmin Almadad, Jonas Haschke 
 
-
-
 ## Quickstart
 
 ```bash,ignore
@@ -43,19 +41,15 @@ Modify configuration files as required.
   - infrastructure/postgre/postgres.env 
 - Portweiterleitung
   - compose.yaml
+- frontend configuration and springs internal port
+  - .env
 
 Note that mosquitto.env file is used to give connection information to backend and fake_service containers.
-Make sure the configuration matches the mosquitto.conf file.
+Make sure the configuration of port and hostname matches the port in mosquitto.conf file and host as container name.
 
 ## Running the Project
 
-Explain in detail how to run the project, including:
-
-Starting the database
-
-Initializing data (if needed, via scripts)
-
-Starting the server
+The compose file builds all components and execute them.
 
 ```bash,ignore
 # Example: Initialize the database
@@ -69,7 +63,7 @@ ProjectName/
 ├── backend/            # maven project with spring service providing RestApi
 ├── fake_service/       # simulates a third party service
 ├── frontend/           # Web Server providing UI view to the client
-├── infrastructure/     # database and messagebrocker configuration goes here.
+├── infrastructure/     # infrastructural configuration goes here.
 ├── compose.yaml        # compose file to build and start all services
 └── README.md           # This file
 

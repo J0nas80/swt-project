@@ -71,8 +71,11 @@ public class EstateService {
 		if(e == null)
 			return;
 		
+		System.out.println("Estate Found.");
 		e.setValidated(true);
 		estateRepository.save(e);
+
+		System.out.println("Estate Validated");
 
 	}
 }

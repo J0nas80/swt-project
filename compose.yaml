@@ -6,10 +6,10 @@ services:
     env_file:
       - path: ./infrastructure/postgres.env
         required: true
-      - path: ./infrstructure/mosquitto.env
+      - path: ./infrastructure/mosquitto.env
         required: true
-      - path: ./infrstructure/backend.env
-        required: true
+    ports:
+      - $BACKEND_PORT:$HTTP_PORT
     depends_on:
       - database
       - mqtt
@@ -22,9 +22,9 @@ services:
     env_file:
       - path: ./infrastructure/postgres.env
         required: true
-      - path: ./infrstructure/mosquitto.env
+      - path: ./infrastructure/mosquitto.env
         required: true
-      - path: ./infrstructure/fake_service.env
+      - path: ./infrastructure/fake_service.env
         required: true
     depends_on: 
       - database
@@ -37,13 +37,8 @@ services:
     build: 
       context: frontend
       args:
-        BACKEND_HOST: ${BACKEND_HOST}
-        BACKEND_PORT: ${HTTP_PORT}
-    env_file:
-      - path: ./infrastucture/fontend.env
-        required: true
-      - path: ./infrstructure/backend.env
-        required: true
+        - HOST=$BACKEND_HOST
+        - PORT=$BACKEND_PORT
     ports:
       - 5173:3000
 
@@ -71,6 +66,7 @@ services:
 
 
 networks:
-  default:
+  swt-network:
     name: swt-network
     driver: bridge
+    external: true

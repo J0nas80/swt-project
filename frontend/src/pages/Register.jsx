@@ -40,7 +40,7 @@ export default function Register() {
     }
 
     try {
-      await axios.post(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/auth/register`, {
+      await axios.post(`http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}/api/auth/register`, {
         firstName: formData.vorname,
         name: formData.nachname,
         dob: formData.geburtdatum,
@@ -53,7 +53,7 @@ export default function Register() {
       // On success: navigate to login
       navigate("/login");
     } catch (err) {
-      setError("Registrierung fehlgeschlagen");
+      setError("Registrierung fehlgeschlagen: " + err.message);
     }
   };
 

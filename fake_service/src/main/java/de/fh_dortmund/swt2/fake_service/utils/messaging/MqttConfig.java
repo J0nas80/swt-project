@@ -2,10 +2,10 @@ package de.fh_dortmund.swt2.fake_service.utils.messaging;
 
 public abstract class MqttConfig {
    
-   protected final String broker = System.getenv("MQTT_HOST");
+   protected final String broker = System.getenv("MOSQUITTO_HOST");
    protected final int qos = 1;
    protected Boolean hasSSL = false; /*By default SSL is disabled */
-   protected Integer port = Integer.parseInt(System.getenv("MQTT_PORT")); /* Default port */
+   protected Integer port = Integer.parseInt(System.getenv("MOSQUITTO_PORT")); /* Default port */
    //protected final String userName = "your username";
    //protected final String password = "Password";
    protected final String TCP = "tcp://";

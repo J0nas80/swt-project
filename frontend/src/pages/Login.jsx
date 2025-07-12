@@ -12,7 +12,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/auth/login`, {
+      const response = await axios.post(`http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}/api/auth/login`, {
         email,
         password,
       });
@@ -72,7 +72,7 @@ export default function Login() {
       </div>
       <BottomNav />
     </div>
-  );
+	)
 }
 
 const containerStyle = {

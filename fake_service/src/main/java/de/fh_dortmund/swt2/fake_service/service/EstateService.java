@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.fh_dortmund.swt2.fake_service.exception.AppUserNotFoundException;
+import de.fh_dortmund.swt2.fake_service.factory.EstateFactory;
 import de.fh_dortmund.swt2.fake_service.model.Address;
 
 //import com.github.javafaker;
@@ -38,12 +39,12 @@ public class EstateService {
 		double area = randomizer.getRandomDouble(25.0, 150.0);
 		double roomCount = randomizer.getRandomInt(3, 10);
 		double coldRent = area * randomizer.getRandomDouble(5.0, 20.0);
-		double warmRent = coldRent + randomizer.getRandomDouble(200.0, 1000.0);
+		randomizer.getRandomDouble(200.0, 1000.0);
   		//String address = "random Address" + LocalDateTime.now().toString();
 		Address address = new Address("blocked", "blocked", "blocked", "blocked", "blocked");
 
  
-		Estate e = Estate.createEstate("Wohnraum der Stadt", "wohnung",  area, roomCount, "description", coldRent, warmRent, address, findRandomAppUser(), "", LocalDate.now() );
+		Estate e = EstateFactory.createEstate("Wohnraum der Stadt", "wohnung",  area, roomCount, "description", coldRent, address, findRandomAppUser(), "", LocalDate.now() );
 
 		e = estateRepository.save(e);
 		mqttPublisher.publishMessage("EstatePublished", Long.toString((long)e.getId()));

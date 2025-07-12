@@ -35,7 +35,7 @@ export default function FilterPage() {
       if (maxPrice) query.append("maxPrice", maxPrice);
       if (propertyType) query.append("type", propertyType);
 
-      const response = await axios.get(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/estate?${query.toString()}`, {
+      const response = await axios.get(`http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}/api/estate?${query.toString()}`, {
         headers: {
           'Authorization': `Bearer ${token}` // <--- ADD THIS LINE: Send the Authorization header
         }

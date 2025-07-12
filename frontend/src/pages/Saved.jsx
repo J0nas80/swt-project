@@ -21,7 +21,7 @@ export default function Saved() {
       return;
     }
 
-    axios.get(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/user/me/saved`, {
+    axios.get(`http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}/api/user/me/saved`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(res => {

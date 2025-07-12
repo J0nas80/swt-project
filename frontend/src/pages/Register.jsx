@@ -40,7 +40,7 @@ export default function Register() {
     }
 
     try {
-      await axios.post("http://localhost:8080/api/auth/register", {
+      await axios.post(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/auth/register`, {
         firstName: formData.vorname,
         name: formData.nachname,
         dob: formData.geburtdatum,

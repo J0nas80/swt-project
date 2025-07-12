@@ -38,14 +38,14 @@ $ cd path/to/swt-project
 Modify configuration files as required.
 - Mosquitto Messagebroker:
   - infrastructure/mosquitto/config/mosquitto.conf
-  - infrastructure/mosquitto/.env
+  - infrastructure/mosquitto/mosquitto.env
 - PostgreSQL Database
-  - infrastructure/postgre/.env 
+  - infrastructure/postgre/postgres.env 
 - Portweiterleitung
   - compose.yaml
 
-Note that mosquittos .env file is used to give connection information to backend and fake_service containers.
-Make sure the configuration matches the mosquitto.conf file
+Note that mosquitto.env file is used to give connection information to backend and fake_service containers.
+Make sure the configuration matches the mosquitto.conf file.
 
 ## Running the Project
 

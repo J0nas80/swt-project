@@ -46,7 +46,7 @@ export default function InseratForm() {
         return;
       }
       const response = await axios.post(
-        'http://localhost:8080/api/estate', // Replace with actual backend endpoint
+        `http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/api/estate`, // Replace with actual backend endpoint
         data,
         {
           headers: {

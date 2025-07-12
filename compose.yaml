@@ -1,15 +1,15 @@
-version: '0.2'
+
 services:
   backend:
-    image: ghcr.io/j0nas80/swt-project/backend
     container_name: backend
-    environment:
-      HTTP_PORT: 8080
+    build: ./backend
     env_file:
-      - path: ./infrastructure/postgre/postgres.env
+      - path: ./infrastructure/postgres.env
         required: true
-    ports:
-      - 8080:8080
+      - path: ./infrstructure/mosquitto.env
+        required: true
+      - path: ./infrstructure/backend.env
+        required: true
     depends_on:
       - database
       - mqtt
@@ -17,49 +17,51 @@ services:
       - swt-network
   
   fake_service:
-    image: ghcr.io/j0nas80/swt-project/fake_service
     container_name: fake_service
-    environment:
-      HTTP_PORT: 8080
+    build: ./fake_service
     env_file:
-      - path: ./infrastructure/postgre/postgres.env
+      - path: ./infrastructure/postgres.env
         required: true
-    depends_on:
+      - path: ./infrstructure/mosquitto.env
+        required: true
+      - path: ./infrstructure/fake_service.env
+        required: true
+    depends_on: 
       - database
       - mqtt
     networks:
       - swt-network
   
   frontend:
-    image: ghcr.io/j0nas80/swt-project/frontend
     container_name: frontend
-    environment:
-      NODE_ENV: production
+    build: 
+      context: frontend
+      args:
+        BACKEND_HOST: ${BACKEND_HOST}
+        BACKEND_PORT: ${HTTP_PORT}
+    env_file:
+      - path: ./infrastucture/fontend.env
+        required: true
+      - path: ./infrstructure/backend.env
+        required: true
     ports:
-      - 3000:3000
+      - 5173:3000
 
   database:
     image: postgres:17
     container_name: database
     restart: always
     env_file: 
-      - path: ./infrastructure/postgre/postgres.env
+      - path: ./infrastructure/postgres.env
         required: true
     volumes:
       - ./infrastructure/postgre/data:/var/lib/postgresql/data
-
-#    ports:
-#      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
     networks:
       - swt-network
 
   mqtt:
     image: eclipse-mosquitto:2
     container_name: mqtt
-    ports:
-      - 1883:1883
-      - 8883:8883
-      - 9001:9001
     volumes:
       - ./infrastructure/mosquitto/config:/mosquitto/config
       - ./infrastructure/mosquitto/data:/mosquitto/data
@@ -69,6 +71,6 @@ services:
 
 
 networks:
-  swt-network:
+  default:
     name: swt-network
     driver: bridge

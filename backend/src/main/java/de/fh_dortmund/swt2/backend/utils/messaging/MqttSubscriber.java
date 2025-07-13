@@ -13,10 +13,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.stereotype.Component;
 
-import de.fh_dortmund.swt2.backend.utils.observer.IObserver;
+import de.fh_dortmund.swt2.backend.utils.observer.*;
 
 @Component
-public class MqttSubscriber extends MqttConfig implements MqttCallback {
+public class MqttSubscriber extends MqttConfig implements MqttCallback, IObservable {
 	
 	private String brokerUrl = null;
     final private String colon = ":";

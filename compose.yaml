@@ -69,4 +69,3 @@ networks:
   swt-network:
     name: swt-network
     driver: bridge
-    external: true

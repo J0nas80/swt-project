@@ -13,10 +13,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.stereotype.Component;
 
-import de.fh_dortmund.swt2.backend.utils.observer.IObserver;
+import de.fh_dortmund.swt2.backend.utils.observer.*;
 
 @Component
-public class MqttSubscriber extends MqttConfig implements MqttCallback {
+public class MqttSubscriber extends MqttConfig implements MqttCallback, IObservable {
 	
 	private String brokerUrl = null;
     final private String colon = ":";
@@ -49,6 +49,7 @@ public class MqttSubscriber extends MqttConfig implements MqttCallback {
 
 	public void registerObserver(IObserver observer)
 	{
+		System.out.println("Obserser registered.");
 		mqttObservers.add(observer);
 	}
 
@@ -59,7 +60,8 @@ public class MqttSubscriber extends MqttConfig implements MqttCallback {
 
 	public void subscribeMessage(String topic) {
 		try {
-			this.mqttClient.subscribe(topic, this.qos);	
+			this.mqttClient.subscribe(topic, this.qos);
+			System.out.println("Subscribe " + topic);
 		} catch (MqttException me) {
 			System.out.println("Cannt Read Topic "+topic);
 		}
@@ -71,6 +73,7 @@ public class MqttSubscriber extends MqttConfig implements MqttCallback {
 
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
+		System.out.println("Messag received: " + topic );
 		for(IObserver o:mqttObservers) {
 			o.update(topic, new String(message.getPayload()));
 		}	

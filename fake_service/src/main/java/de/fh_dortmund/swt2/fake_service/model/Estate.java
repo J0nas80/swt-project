@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -38,7 +40,7 @@ public class Estate implements Serializable{
     @NotNull(message = "Zimmeranzahl darf nicht null sein")
     private Double roomCount;
 
-    @NotNull(message = "Beschreibung darf nicht null sein")
+    // @NotNull(message = "Beschreibung darf nicht null sein")
     private String description;
 
     @NotNull(message = "Kaltmiete darf nicht null sein")
@@ -49,9 +51,10 @@ public class Estate implements Serializable{
     private Address address;
 
     @ManyToOne
+    @JsonBackReference
     private AppUser landlord;
 
-    @NotNull(message = "Bild darf nicht null sein")
+    //@NotNull(message = "Bild darf nicht null sein")
     private String img; // Base64
 
     @ManyToMany
@@ -87,21 +90,7 @@ public class Estate implements Serializable{
         this.availableFrom = availableFrom;
     }
 
-    // Methoden
-
-    // Muster: Fabrikmethode, implementiert als statische Methode zur Erzeugung von
-    // Objekten
-    public static Estate createEstate(String titel, String type, double area, double roomCount, String description,
-            double rentCold,
-            double rentWarm, Address address,
-            AppUser landLord, String img, LocalDate availableFrom) {
-        Estate estate = new Estate(titel, type, area, roomCount, description, rentCold, address, landLord,
-                img,
-                availableFrom);
-        estate.setValidated(false);
-        estate.setVisible(false);
-        return estate;
-    }
+    //Methoden
 
     public void addTenant(AppUser tenant) {
         this.tenants.add(tenant);

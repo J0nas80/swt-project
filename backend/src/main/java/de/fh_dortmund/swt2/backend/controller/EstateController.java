@@ -21,7 +21,7 @@ public class EstateController {
 
 
     @PostMapping()
-    public ResponseEntity<?> saveEstate(@RequestHeader("Authorization") String token, @RequestBody EstateCreateDto estateDto){
+    public ResponseEntity<?> saveEstate(@RequestHeader("Authorization") String token, @ModelAttribute EstateCreateDto estateDto){
         if(token.startsWith("Bearer ")){
             // Token kommt als "Bearer <token>", also muss "Bearer " abgeschnitten werden
             token = token.replace("Bearer ", "");

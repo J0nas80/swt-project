@@ -15,7 +15,7 @@ export default function UserData() {
       setError("Nicht eingeloggt.");
       return;
     }
-    axios.get("http://localhost:8080/api/user/me", {
+    axios.get(`http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}/api/user/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       }

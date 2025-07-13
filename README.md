@@ -1,77 +1,59 @@
 # Template repository for the Software Engineering lecture
 
-> [!IMPORTANT]
-> Replace this README with a detailed description of your project, your team, and instructions on how to run it.
-
-> [!IMPORTANT]
-> If you choose to keep your repository private, make sure to invite all your team members and teaching staff. Ask for their usernames if needed.
-
-Provide a general introduction to your project. Describe the purpose, goals, and the technologies used. Explain the value your project offers.
-
 ## Team
-List the team members involved in the project:
 
-Team Leader: Boulahoula, Houda
+Team Leader: Sami Chaker
 
-Members: Houda Boulahoula, Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami Chaker, Yasmin Almadad, Jonas Haschke 
-
-
+Members: Ivy Chrystabell, Alexis Moos, Sobadeh Sherzad, Sami Chaker, Yasmin Almadad, Jonas Haschke 
 
 ## Quickstart
 
-This section outlines the steps required to get your project up and running quickly:
-
 ```bash,ignore
-# To build local and run all services
-$ docker compose -f compose.dev.yaml up --build 
+# clone repository
+$ git clone https://github.com/J0nas80/swt-project.git
 
-# to start services build by github actions on main branch
-$ docker compose
+# build and run all services
+$ docker compose up -d --build 
 ```
 
 ## Prerequisites
 
-Detail all the necessary prerequisites for running your project, such as:
-
-Software: Docker, Java, Maven
-
-Ports: can be configured in docker compose files
+Software: Docker, git
 
 ## Installation and Setup
 
-Provide step-by-step instructions on how to clone the repository, install the project, and configure it:
-
 1. Clone the repository:
 ```bash,ignore
-$ git clone https://github.com/YourRepository.git
+$ git clone https://github.com/J0nas80/swt-project.git
 ```
 
 2. Navigate to the project directory:
 ```bash,ignore
-$ cd ProjectName
+$ cd path/to/swt-project
 ```
 
 3. Adjust configuration files:
+Modify configuration files as required.
+- Mosquitto Messagebroker:
+  - infrastructure/mosquitto/config/mosquitto.conf
+  - infrastructure/mosquitto/mosquitto.env
+- PostgreSQL Database
+  - infrastructure/postgre/postgres.env 
+- Portweiterleitung
+  - compose.yaml
+- frontend configuration and springs internal port
+  - .env
 
-Modify configuration files (e.g., `.env`, `application.properties`) as required.
-
+Note that mosquitto.env file is used to give connection information to backend and fake_service containers.
+Make sure the configuration of port and hostname matches the port in mosquitto.conf file and host as container name.
 
 ## Running the Project
 
-Explain in detail how to run the project, including:
-
-Starting the database
-
-Initializing data (if needed, via scripts)
-
-Starting the server
+The compose file builds all components and execute them.
 
 ```bash,ignore
 # Example: Initialize the database
-$ ./init-db.sh
-
-# Start the project
-$ ./mvnw spring-boot:run
+docker compose up -d --build
 ```
 
 ## Project structure
@@ -81,6 +63,8 @@ ProjectName/
 ├── backend/            # maven project with spring service providing RestApi
 ├── fake_service/       # simulates a third party service
 ├── frontend/           # Web Server providing UI view to the client
-├── infrastructure/     # database and messagebrocker configuration goes here.
+├── infrastructure/     # infrastructural configuration goes here.
+├── compose.yaml        # compose file to build and start all services
 └── README.md           # This file
+
 ```
